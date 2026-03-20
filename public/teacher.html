@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Teacher Dashboard</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: Arial;
+  background: linear-gradient(135deg, #0f0f1a, #1a0033);
+  color: white;
+}
+
+/* NAVBAR */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  background: #140024;
+  padding: 15px 30px;
+}
+
+.navbar a {
+  margin-right: 20px;
+  color: white;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.navbar a:hover {
+  color: #c084fc;
+}
+
+.container {
+  padding: 30px;
+}
+
+.card {
+  background: #1e1e2f;
+  padding: 20px;
+  border-radius: 20px;
+  max-width: 550px;
+  margin: auto;
+  box-shadow: 0 0 10px purple;
+}
+
+.section {
+  display: none;
+}
+
+.active {
+  display: block;
+}
+
+ select, button {
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+  border-radius: 6px;
+  border: none;
+}
+input{
+  width: 97%;
+  padding: 10px;
+  margin-top: 10px;
+  border-radius: 6px;
+  border: none;
+
+}
+
+input, select {
+  background: #2c2c44;
+  color: white;
+}
+
+button {
+  background: #7c3aed;
+  color: white;
+  cursor: pointer;
+}
+
+.question-box {
+  background: #2c2c44;
+  padding: 10px;
+  margin-top: 10px;
+  border-radius: 6px;
+}
+</style>
+
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+  <div>👩‍🏫 Teacher Panel</div>
+  <div>
+    <a onclick="showSection('add')">Add Question</a>
+    <a onclick="showSection('view')">View Questions</a>
+    <a onclick="showSection('performance')">Student Performance</a>
+    <a onclick="logout()">Logout</a>
+  </div>
+</div>
+
+<div class="container">
+
+<!-- ADD QUESTION -->
+<div id="add" class="section active card">
+  <h3>➕ Add Question</h3>
+
+  <select id="grade">
+    <option value="">Select Grade</option>
+    <option>1</option><option>2</option><option>3</option>
+    <option>4</option><option>5</option><option>6</option>
+    <option>7</option><option>8</option><option>9</option>
+    <option>10</option><option>11</option><option>12</option>
+  </select>
+
+  <select id="subject">
+    <option value="">Select Subject</option>
+    <option>Science</option>
+    <option>Technology</option>
+    <option>Engineering</option>
+    <option>Mathematics</option>
+  </select>
+
+  <input type="text" id="question" placeholder="Enter Question">
+
+  <input type="text" id="opt1" placeholder="Option 1">
+  <input type="text" id="opt2" placeholder="Option 2">
+  <input type="text" id="opt3" placeholder="Option 3">
+  <input type="text" id="opt4" placeholder="Option 4">
+
+  <input type="text" id="answer" placeholder="Correct Answer">
+
+  <button onclick="addQuestion()">Add Question</button>
+</div>
+
+<!-- VIEW QUESTIONS -->
+<div id="view" class="section card">
+  <h3>📋 All Questions</h3>
+
+  <div id="questionsList"></div>
+</div>
+
+<div id="performance" class="section card">
+  <h3>📊 Student Performance</h3>
+
+  <div id="performanceList"></div>
+</div>
+
+</div>
+
+<script>
+
+// SWITCH SECTION
+function showSection(id) {
+  document.querySelectorAll(".section").forEach(sec => {
+    sec.classList.remove("active");
+  });
+
+  document.getElementById(id).classList.add("active");
+
+  if (id === "view") {
+    loadQuestions();
+  }
+
+  if (id === "performance") {
+    loadPerformance();
+  }
+}
+
+// ADD QUESTION
+async function addQuestion() {
+
+  const question = document.getElementById("question").value;
+  const grade = document.getElementById("grade").value;
+  const subject = document.getElementById("subject").value;
+
+  const options = [
+    document.getElementById("opt1").value,
+    document.getElementById("opt2").value,
+    document.getElementById("opt3").value,
+    document.getElementById("opt4").value
+  ];
+
+  const answer = document.getElementById("answer").value;
+
+  await fetch("http://127.0.0.1:8080/api/questions/add", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      question,
+      options,
+      answer,
+      subject,
+      grade
+    })
+  });
+
+  alert("Question Added ✅");
+}
+
+// LOAD QUESTIONS
+async function loadQuestions() {
+  const res = await fetch("http://127.0.0.1:8080/api/questions");
+  const data = await res.json();
+
+  const container = document.getElementById("questionsList");
+  container.innerHTML = "";
+
+  data.forEach(q => {
+    container.innerHTML += `
+      <div class="question-box">
+        <b>${q.question}</b><br>
+        ${q.subject} | Grade ${q.grade}
+      </div>
+    `;
+  });
+}
+
+async function loadPerformance() {
+
+  const res = await fetch("http://127.0.0.1:8080/api/scores");
+  const data = await res.json();
+
+  const container = document.getElementById("performanceList");
+  container.innerHTML = "";
+
+  data.forEach(s => {
+
+    const percent = Math.round((s.score / s.total) * 100);
+
+    container.innerHTML += `
+      <div class="question-box">
+        <b>${s.email}</b><br>
+        ${s.subject} | Grade ${s.grade}<br>
+        Score: ${s.score}/${s.total} (${percent}%)
+      </div>
+    `;
+  });
+}
+
+// LOGOUT
+function logout() {
+  window.location.href = "login.html";
+}
+
+</script>
+
+</body>
+</html>

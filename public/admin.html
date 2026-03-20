@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Admin Dashboard</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: Arial;
+  background: linear-gradient(135deg, #0f0f1a, #1a0033);
+  color: white;
+}
+
+/* NAVBAR */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  background: #140024;
+  padding: 15px 30px;
+}
+
+.navbar a {
+  margin-right: 20px;
+  color: white;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.navbar a:hover {
+  color: #c084fc;
+}
+
+.container {
+  padding: 30px;
+}
+
+.card {
+  background: #1e1e2f;
+  padding: 20px;
+  border-radius: 10px;
+  max-width: 700px;
+  margin: auto;
+  box-shadow: 0 0 10px purple;
+}
+
+.section {
+  display: none;
+}
+
+.active {
+  display: block;
+}
+
+.user-box, .score-box {
+  background: #2c2c44;
+  padding: 10px;
+  margin-top: 10px;
+  border-radius: 6px;
+}
+
+button {
+  background: red;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  margin-top: 5px;
+  cursor: pointer;
+}
+</style>
+
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+  <div>🛠️ Admin Panel</div>
+  <div>
+    <a onclick="showSection('users')">Manage Users</a>
+    <a onclick="showSection('performance')">View Performance</a>
+    <a onclick="logout()">Logout</a>
+  </div>
+</div>
+
+<div class="container">
+
+<!-- USERS -->
+<div id="users" class="section active card">
+  <h3>👥 All Users</h3>
+  <div id="userList"></div>
+</div>
+
+<!-- PERFORMANCE -->
+<div id="performance" class="section card">
+  <h3>📊 All Student Scores</h3>
+  <div id="scoreList"></div>
+</div>
+
+</div>
+
+<script>
+
+// SWITCH SECTION
+function showSection(id) {
+  document.querySelectorAll(".section").forEach(sec => {
+    sec.classList.remove("active");
+  });
+
+  document.getElementById(id).classList.add("active");
+
+  if (id === "users") loadUsers();
+  if (id === "performance") loadScores();
+}
+
+// LOAD USERS
+async function loadUsers() {
+  const res = await fetch("http://127.0.0.1:8080/api/auth/users");
+  const users = await res.json();
+
+  const container = document.getElementById("userList");
+  container.innerHTML = "";
+
+  users.forEach(u => {
+    container.innerHTML += `
+      <div class="user-box">
+        <b>${u.email}</b> (${u.role})
+      </div>
+    `;
+  });
+}
+
+// LOAD SCORES
+async function loadScores() {
+  const res = await fetch("http://127.0.0.1:8080/api/scores");
+  const scores = await res.json();
+
+  const container = document.getElementById("scoreList");
+  container.innerHTML = "";
+
+  scores.forEach(s => {
+    const percent = Math.round((s.score / s.total) * 100);
+
+    container.innerHTML += `
+      <div class="score-box">
+        <b>${s.email}</b><br>
+        ${s.subject} | Grade ${s.grade}<br>
+        Score: ${s.score}/${s.total} (${percent}%)
+      </div>
+    `;
+  });
+}
+
+// LOGOUT
+function logout() {
+  window.location.href = "login.html";
+}
+
+// LOAD DEFAULT
+loadUsers();
+
+</script>
+
+</body>
+</html>
