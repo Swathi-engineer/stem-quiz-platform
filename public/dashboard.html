@@ -130,23 +130,20 @@ button {
 <div id="results" class="section card">
   <h3>📊 Your Results</h3>
 
-  <div class="result-box">Science - Grade 6 → Score: 8/10</div>
-  <div class="result-box">Math - Grade 6 → Score: 7/10</div>
+  <!-- Dynamic results list will go here via loadResults() -->
   <div id="resultsList"></div>
 </div>
 
 <!-- PERFORMANCE -->
 <div id="performance" class="section card">
-  <h3>📈 Weekly Performance</h3>
-
-  <p>Monday</p>
-  <div class="bar" style="width: 70%"></div>
-
-  <p>Wednesday</p>
-  <div class="bar" style="width: 50%"></div>
-
-  <p>Friday</p>
-  <div class="bar" style="width: 90%"></div>
+  <h4 id="badge" style="text-align:center; color:#fde047; margin-bottom: 10px;"></h4>
+  <p id="total">Total Quizzes: 0</p>
+  <p id="score">Average Score: 0%</p>
+  
+  <h3 style="margin-top:20px;">📊 Recent Activity</h3>
+  <div id="performance-bars">
+    <!-- Bars will be generated here -->
+  </div>
 </div>
 
 </div>
@@ -172,7 +169,7 @@ function startQuiz() {
     return;
   }
 
-  window.location.href = `quiz.html?grade=${grade}&subject=${subject}`;
+  window.location.href = `quiz.html?grade=${grade}&subject=${subject}&email=${email}`;
 }
 
 // GET EMAIL FROM URL
@@ -215,6 +212,24 @@ async function loadPerformance() {
   else if (percentage >= 50) badge = "🥈 Silver";
 
   document.getElementById("badge").innerText = badge;
+  
+  // GENERATE PERFORMANCE BARS FOR RECENT QUIZZES
+  const barsContainer = document.getElementById("performance-bars");
+  barsContainer.innerHTML = "";
+
+  if(myData.length === 0) {
+    barsContainer.innerHTML = "<p>No quizzes taken yet.</p>";
+  } else {
+    // Show last 5 quizzes
+    const recentActivity = myData.slice(-5);
+    recentActivity.forEach(s => {
+      const p = s.total ? Math.round((s.score / s.total) * 100) : 0;
+      barsContainer.innerHTML += `
+        <p style="margin-top: 10px;">${s.subject} (Grade ${s.grade}) - ${p}%</p>
+        <div class="bar" style="width: ${p}%"></div>
+      `;
+    });
+  }
 }
 
 // LOAD RESULTS LIST

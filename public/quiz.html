@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Quiz</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', Arial, sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #0f0f1a, #1a0033);
+      color: white;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 700px;
+      background: rgba(30, 27, 58, 0.9);
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 0 20px rgba(168, 85, 247, 0.5);
+      backdrop-filter: blur(10px);
+      animation: fadeIn 0.5s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    h2 {
+      text-align: center;
+      color: #c084fc;
+      margin-bottom: 20px;
+    }
+    
+    .question-card {
+      background: #2a2755;
+      padding: 20px;
+      margin-bottom: 20px;
+      border-radius: 10px;
+    }
+
+    .question-text {
+      font-size: 1.1em;
+      margin-bottom: 15px;
+      font-weight: bold;
+    }
+
+    .option-label {
+      display: block;
+      background: #1e1b3a;
+      padding: 10px 15px;
+      margin: 8px 0;
+      border-radius: 8px;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: all 0.3s;
+    }
+
+    .option-label:hover {
+      border-color: #a855f7;
+    }
+
+    .option-label input {
+      margin-right: 10px;
+    }
+
+    button {
+      width: 100%;
+      padding: 15px;
+      margin-top: 20px;
+      border: none;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #a855f7, #6d28d9);
+      color: white;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      transform: scale(1.02);
+      box-shadow: 0 0 15px #a855f7;
+    }
+
+    .answer-feedback {
+      margin-top: 10px;
+      padding: 10px;
+      border-radius: 8px;
+      font-weight: bold;
+      display: none;
+    }
+
+    .correct {
+      background: rgba(34, 197, 94, 0.2);
+      color: #4ade80;
+      border: 1px solid #4ade80;
+    }
+
+    .incorrect {
+      background: rgba(239, 68, 68, 0.2);
+      color: #f87171;
+      border: 1px solid #f87171;
+    }
+
+    #score-container {
+      text-align: center;
+      margin-top: 20px;
+      display: none;
+    }
+
+    #score-text {
+      font-size: 1.5em;
+      color: #fde047;
+      margin-bottom: 15px;
+    }
+    
+    .loading {
+      text-align: center;
+      font-size: 1.2em;
+      color: #c084fc;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h2 id="quiz-title">Loading Quiz...</h2>
+
+  <div id="loading" class="loading">Fetching questions...</div>
+  <div id="quiz-container"></div>
+
+  <button id="submit-btn" style="display: none;" onclick="submitQuiz()">Submit Answers</button>
+
+  <div id="score-container">
+    <div id="score-text"></div>
+    <button onclick="goBack()">Back to Dashboard</button>
+  </div>
+</div>
+
+<script>
+  const params = new URLSearchParams(window.location.search);
+  const grade = params.get("grade");
+  const subject = params.get("subject");
+  const email = params.get("email");
+
+  document.getElementById("quiz-title").innerText = `${subject} Quiz (Grade ${grade})`;
+
+  let questions = [];
+
+  async function loadQuestions() {
+    try {
+      const res = await fetch(`http://localhost:8080/api/questions/${grade}/${subject}`);
+      questions = await res.json();
+
+      document.getElementById("loading").style.display = "none";
+      const container = document.getElementById("quiz-container");
+
+      if (questions.length === 0) {
+        container.innerHTML = "<p style='text-align:center;'>No questions available for this grade and subject yet.</p>";
+        document.getElementById("submit-btn").style.display = "none";
+        document.getElementById("score-container").style.display = "block";
+        return;
+      }
+
+      questions.forEach((q, index) => {
+        let optionsHtml = "";
+        q.options.forEach((opt, optIndex) => {
+          optionsHtml += `
+            <label class="option-label">
+              <input type="radio" name="q-${index}" value="${opt}">
+              ${opt}
+            </label>
+          `;
+        });
+
+        container.innerHTML += `
+          <div class="question-card" id="card-${index}">
+            <div class="question-text">${index + 1}. ${q.question}</div>
+            <div class="options">
+              ${optionsHtml}
+            </div>
+            <div id="feedback-${index}" class="answer-feedback"></div>
+          </div>
+        `;
+      });
+
+      document.getElementById("submit-btn").style.display = "block";
+
+    } catch (err) {
+      console.error(err);
+      document.getElementById("loading").innerText = "Failed to load questions.";
+    }
+  }
+
+  async function submitQuiz() {
+    let score = 0;
+    
+    questions.forEach((q, index) => {
+      const selected = document.querySelector(`input[name="q-${index}"]:checked`);
+      const feedbackDiv = document.getElementById(`feedback-${index}`);
+      
+      // Disable inputs
+      document.querySelectorAll(`input[name="q-${index}"]`).forEach(input => input.disabled = true);
+      
+      feedbackDiv.style.display = "block";
+
+      if (selected && selected.value === q.answer) {
+        score++;
+        feedbackDiv.className = "answer-feedback correct";
+        feedbackDiv.innerHTML = `✅ Correct!`;
+      } else {
+        feedbackDiv.className = "answer-feedback incorrect";
+        const userAnswer = selected ? selected.value : "None";
+        feedbackDiv.innerHTML = `❌ Incorrect. You chose: <b>${userAnswer}</b> <br><br>💡 The correct answer is: <b>${q.answer}</b>`;
+      }
+    });
+
+    document.getElementById("submit-btn").style.display = "none";
+    
+    const scoreText = document.getElementById("score-text");
+    document.getElementById("score-container").style.display = "block";
+    scoreText.innerText = `You scored ${score} out of ${questions.length}!`;
+
+    // Save Score
+    if(email) {
+      try {
+        await fetch("http://localhost:8080/api/scores/save", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            email,
+            score,
+            total: questions.length,
+            subject,
+            grade
+          })
+        });
+        console.log("Score saved successfully!");
+      } catch (err) {
+        console.error("Failed to save score:", err);
+      }
+    } else {
+      console.warn("No email provided, score cannot be saved.");
+    }
+  }
+
+  function goBack() {
+    window.location.href = `dashboard.html?email=${email || ''}`;
+  }
+
+  loadQuestions();
+</script>
+
+</body>
+</html>
