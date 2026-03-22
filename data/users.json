@@ -8,5 +8,11 @@
     "email": "teacher@gmail.com",
     "password": "1234",
     "role": "teacher"
+  },
+  {
+    "email": "admin@gmail.com",
+    "password": "1234",
+    "role": "admin"
   }
+
 ]

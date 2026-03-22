@@ -8,11 +8,11 @@ router.get("/", async (req, res) => {
   res.json(questions);
 });
 
-// ✅ ADD QUESTION (ADD HERE 👇)
+// ✅ ADD QUESTION
 router.post("/add", async (req, res) => {
-  const { question, options, answer, subject, grade } = req.body;
+  const { question, options, answer, subject, grade, addedBy } = req.body;
 
-  const newQ = new Question({ question, options, answer, subject, grade });
+  const newQ = new Question({ question, options, answer, subject, grade, addedBy });
   await newQ.save();
 
   res.json({ message: "Question added ✅" });
