@@ -5,9 +5,9 @@ const User = require("../models/User");
 // REGISTER
 router.post("/register", async (req, res) => {
   try {
-    const { name, email, password } = req.body;
+    const { name, email, password, role } = req.body;
 
-    const user = new User({ name, email, password });
+    const user = new User({ name, email, password, role });
     await user.save();
 
     res.json({ message: "User registered successfully" });
@@ -40,6 +40,16 @@ router.post("/login", async (req, res) => {
 router.get("/users", async (req, res) => {
   const users = await User.find();
   res.json(users);
+});
+
+// ✅ DELETE USER (ADMIN)
+router.delete("/users/:id", async (req, res) => {
+  try {
+    await User.findByIdAndDelete(req.params.id);
+    res.json({ message: "User deleted" });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
 //EXPORT

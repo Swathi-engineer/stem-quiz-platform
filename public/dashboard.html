@@ -84,6 +84,24 @@ button {
   margin-top: 5px;
   border-radius: 5px;
 }
+
+/* BADGE ANIMATION */
+@keyframes levitate {
+  0% { transform: translateY(0px) scale(1); text-shadow: 0 0 10px rgba(253, 224, 71, 0.5); }
+  50% { transform: translateY(-10px) scale(1.1); text-shadow: 0 0 25px rgba(253, 224, 71, 1), 0 0 15px rgba(255, 255, 255, 0.8); }
+  100% { transform: translateY(0px) scale(1); text-shadow: 0 0 10px rgba(253, 224, 71, 0.5); }
+}
+
+#badge {
+  text-align: center;
+  color: #fde047;
+  margin-bottom: 20px;
+  font-size: 2.5em; /* Make it large and proud! */
+  animation: levitate 2.5s ease-in-out infinite;
+  display: inline-block; /* Required for the transform animation to work perfectly */
+  width: 100%;
+  margin-top: 10px;
+}
 </style>
 
 </head>
@@ -136,7 +154,7 @@ button {
 
 <!-- PERFORMANCE -->
 <div id="performance" class="section card">
-  <h4 id="badge" style="text-align:center; color:#fde047; margin-bottom: 10px;"></h4>
+  <h4 id="badge"></h4>
   <p id="total">Total Quizzes: 0</p>
   <p id="score">Average Score: 0%</p>
   
@@ -179,7 +197,7 @@ const email = params.get("email");
 // LOAD PERFORMANCE
 async function loadPerformance() {
 
-  const res = await fetch("http://127.0.0.1:8080/api/scores");
+  const res = await fetch("/api/scores");
   const data = await res.json();
 
   // 👉 FILTER ONLY CURRENT USER
@@ -235,7 +253,7 @@ async function loadPerformance() {
 // LOAD RESULTS LIST
 async function loadResults() {
 
-  const res = await fetch("http://127.0.0.1:8080/api/scores");
+  const res = await fetch("/api/scores");
   const data = await res.json();
 
   const myData = data.filter(s => s.email === email);

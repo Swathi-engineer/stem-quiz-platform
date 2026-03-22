@@ -8,7 +8,7 @@ const questionRoutes = require("./routes/questionRoutes");
 const scoreRoutes = require("./routes/scoreRoutes");
 
 const app = express();
-const PORT = 8080;
+const PORT = 8081;
 
 // Middleware
 app.use(cors());

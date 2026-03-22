@@ -170,6 +170,10 @@ function showSection(id) {
   }
 }
 
+// Get Email
+const params = new URLSearchParams(window.location.search);
+const email = params.get("email");
+
 // ADD QUESTION
 async function addQuestion() {
 
@@ -186,7 +190,7 @@ async function addQuestion() {
 
   const answer = document.getElementById("answer").value;
 
-  await fetch("http://127.0.0.1:8080/api/questions/add", {
+  await fetch("/api/questions/add", {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
@@ -196,7 +200,8 @@ async function addQuestion() {
       options,
       answer,
       subject,
-      grade
+      grade,
+      addedBy: email
     })
   });
 
@@ -205,13 +210,14 @@ async function addQuestion() {
 
 // LOAD QUESTIONS
 async function loadQuestions() {
-  const res = await fetch("http://127.0.0.1:8080/api/questions");
-  const data = await res.json();
+  const res = await fetch("/api/questions");
+  let data = await res.json();
 
   const container = document.getElementById("questionsList");
   container.innerHTML = "";
 
-  data.forEach(q => {
+  // Reverse so the newest questions show up first!
+  data.reverse().forEach(q => {
     container.innerHTML += `
       <div class="question-box">
         <b>${q.question}</b><br>
@@ -223,7 +229,7 @@ async function loadQuestions() {
 
 async function loadPerformance() {
 
-  const res = await fetch("http://127.0.0.1:8080/api/scores");
+  const res = await fetch("/api/scores");
   const data = await res.json();
 
   const container = document.getElementById("performanceList");
