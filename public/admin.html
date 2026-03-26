@@ -4,68 +4,110 @@
 <meta charset="UTF-8">
 <title>Admin Dashboard</title>
 
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&display=swap" rel="stylesheet">
 <style>
+* { box-sizing: border-box; }
 body {
   margin: 0;
-  font-family: Arial;
-  background: linear-gradient(135deg, #0f0f1a, #1a0033);
+  font-family: 'Outfit', sans-serif;
+  background: linear-gradient(45deg, #0f0f1a, #1a0033, #0b0726, #210d33);
+  background-size: 400% 400%;
+  animation: bgPulse 15s ease infinite; 
   color: white;
+}
+@keyframes bgPulse {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
 /* NAVBAR */
 .navbar {
   display: flex;
   justify-content: space-between;
-  background: #140024;
+  align-items: center;
+  background: rgba(20, 0, 36, 0.85);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
   padding: 15px 30px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  position: sticky;
+  top: 0;
+  z-index: 100;
 }
-
-.navbar a {
-  margin-right: 20px;
-  color: white;
-  text-decoration: none;
-  cursor: pointer;
+.navbar .brand { font-size: 1.5em; font-weight: bold; color: #a855f7; letter-spacing: 1px; }
+.navbar-nav { display: flex; gap: 20px; }
+.navbar-nav a {
+  color: #a0a0b0; text-decoration: none; cursor: pointer; font-weight: bold;
+  text-transform: uppercase; letter-spacing: 1px; transition: 0.3s;
 }
+.navbar-nav a:hover, .navbar-nav a.active-link { color: white; }
 
-.navbar a:hover {
-  color: #c084fc;
-}
-
-.container {
-  padding: 30px;
-}
-
+.container { padding: 40px; max-width: 900px; margin: 0 auto; }
 .card {
-  background: #1e1e2f;
-  padding: 20px;
-  border-radius: 10px;
-  max-width: 700px;
-  margin: auto;
-  box-shadow: 0 0 10px purple;
+  background: rgba(20, 20, 32, 0.65);
+  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  padding: 40px; border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  animation: fadeIn 0.5s ease-in-out;
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-.section {
-  display: none;
-}
+.section { display: none; }
+.active { display: block; }
+h3 { margin-top: 0; margin-bottom: 25px; font-size: 1.8em; color: #fff; }
 
-.active {
-  display: block;
-}
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+.full-width { grid-column: span 2; }
 
-.user-box, .score-box {
-  background: #2c2c44;
-  padding: 10px;
-  margin-top: 10px;
-  border-radius: 6px;
+input, select {
+  width: 100%; padding: 15px; border-radius: 12px;
+  border: 2px solid #3d3d5c; outline: none;
+  background: #2c2c44; color: white;
+  font-size: 16px; font-family: inherit; transition: 0.3s;
 }
+input::placeholder { color: #a0a0b0; }
+input:focus, select:focus { border-color: #a855f7; box-shadow: 0 0 10px rgba(168, 85, 247, 0.3); background: #3d3d5c; }
 
 button {
-  background: red;
-  color: white;
-  border: none;
-  padding: 5px 10px;
-  margin-top: 5px;
-  cursor: pointer;
+  width: 100%; padding: 15px; border: none; border-radius: 12px;
+  font-family: 'Outfit', sans-serif; color: white;
+  font-size: 18px; font-weight: bold; cursor: pointer;
+  transition: transform 0.1s, border-bottom 0.1s;
+}
+button:hover { filter: brightness(1.1); }
+button:active { transform: translateY(4px); border-bottom: 0px solid transparent; }
+
+.btn-green { background: #22c55e; border-bottom: 4px solid #16a34a; margin-top: 15px;}
+.btn-green:active { border-bottom-color: transparent; }
+
+.btn-red { background: #ef4444; border-bottom: 4px solid #dc2626; padding: 10px; font-size: 14px; margin-top: 0; }
+.btn-red:active { border-bottom-color: transparent; }
+
+.user-box, .score-box {
+  background: rgba(44, 44, 68, 0.8);
+  padding: 20px; margin-top: 15px; border-radius: 12px;
+  border-left: 5px solid #a855f7;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  display: flex; justify-content: space-between; align-items: center;
+}
+
+/* FLOATING ICONS */
+.f-icon {
+  position: fixed; font-size: 50px; opacity: 0.08;
+  animation: float 6s ease-in-out infinite;
+  z-index: -1; pointer-events: none;
+}
+.i1 { top: 15%; right: 10%; animation-delay: 0s; }
+.i2 { bottom: 15%; right: 20%; animation-delay: 1s; }
+.i3 { top: 40%; left: 5%; animation-delay: 2s; }
+@keyframes float {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-15px) rotate(5deg); }
 }
 </style>
 
@@ -75,42 +117,50 @@ button {
 
 <!-- NAVBAR -->
 <div class="navbar">
-  <div>🛠️ Admin Panel</div>
-  <div>
-    <a onclick="showSection('users')">Manage Users</a>
-    <a onclick="showSection('performance')">View Performance</a>
+  <div class="brand">🛠️ Admin Panel</div>
+  <div class="navbar-nav">
+    <a onclick="showSection('users')" class="nav-link active-link" id="nav-users">Manage Users</a>
+    <a onclick="showSection('performance')" class="nav-link" id="nav-perf">Platform Analytics</a>
     <a onclick="logout()">Logout</a>
   </div>
 </div>
 
+<div class="f-icon i1">👑</div>
+<div class="f-icon i2">📈</div>
+<div class="f-icon i3">⚙️</div>
+
 <div class="container">
 
-<!-- USERS -->
+<!-- USERS SECTION -->
 <div id="users" class="section active card">
   <h3>➕ Add New User</h3>
-  <input type="email" id="newEmail" placeholder="User Email" style="width: 100%; padding: 10px; margin-top: 5px; background: #2c2c44; color: white; border: none; border-radius: 5px;" />
-  <input type="password" id="newPass" placeholder="Password" style="width: 100%; padding: 10px; margin-top: 10px; background: #2c2c44; color: white; border: none; border-radius: 5px;" />
   
-  <select id="newRole" style="width: 100%; padding: 10px; margin-top: 10px; background: #2c2c44; color: white; border: none; border-radius: 5px; outline:none;">
-    <option value="student">Student</option>
-    <option value="teacher">Teacher</option>
-    <option value="admin">Admin</option>
-  </select>
+  <div class="form-grid">
+    <input type="email" id="newEmail" placeholder="User Email" />
+    <input type="password" id="newPass" placeholder="Password" />
+    <div class="full-width">
+      <select id="newRole">
+        <option value="student">Student Account</option>
+        <option value="teacher">Teacher Account</option>
+        <option value="admin">Admin Account</option>
+      </select>
+    </div>
+  </div>
   
-  <button onclick="addUser()" style="width: 100%; background: #22c55e; color: white; padding: 10px; margin-top: 15px; border-radius: 5px; font-weight:bold; cursor: pointer; border: none;">Add User</button>
+  <button onclick="addUser()" class="btn-green">Create User</button>
 
-  <hr style="border-color: #a855f7; margin: 25px 0;">
+  <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.1); margin: 35px 0;">
 
   <h3>👥 Manage Existing Users</h3>
   <div id="userList"></div>
 </div>
 
-<!-- PERFORMANCE -->
+<!-- PERFORMANCE / ANALYTICS SECTION -->
 <div id="performance" class="section card">
   <h3 style="color:#c084fc; border-bottom: 2px solid #c084fc; padding-bottom:10px;">🎓 Student Analytics</h3>
-  <div id="scoreList" style="margin-bottom: 30px;"></div>
+  <div id="scoreList" style="margin-bottom: 40px;"></div>
 
-  <h3 style="color:#22c55e; border-bottom: 2px solid #22c55e; padding-bottom:10px;">👩‍🏫 Active Instructors</h3>
+  <h3 style="color:#22c55e; border-bottom: 2px solid #22c55e; padding-bottom:10px;">👩‍🏫 Active Teachers</h3>
   <div id="teacherList"></div>
 </div>
 
@@ -120,11 +170,13 @@ button {
 
 // SWITCH SECTION
 function showSection(id) {
-  document.querySelectorAll(".section").forEach(sec => {
-    sec.classList.remove("active");
-  });
+  document.querySelectorAll(".section").forEach(sec => sec.classList.remove("active"));
+  document.querySelectorAll(".nav-link").forEach(link => link.classList.remove("active-link"));
 
   document.getElementById(id).classList.add("active");
+  if(document.getElementById("nav-" + (id==="users"?"users":"perf"))) {
+     document.getElementById("nav-" + (id==="users"?"users":"perf")).classList.add("active-link");
+  }
 
   if (id === "users") loadUsers();
   if (id === "performance") loadScores();
@@ -170,12 +222,14 @@ async function loadUsers() {
 
   users.forEach(u => {
     container.innerHTML += `
-      <div class="user-box" style="display:flex; justify-content:space-between; align-items:center;">
+      <div class="user-box">
         <div>
-          <b>${u.email}</b>
-          <span style="background:#a855f7; padding:2px 8px; border-radius:10px; font-size:12px; margin-left:10px;">${u.role}</span>
+          <b style="font-size:1.1em;">${u.email}</b>
+          <span style="background:rgba(168,85,247,0.3); color:#e9d5ff; padding:4px 10px; border-radius:12px; font-size:0.85em; font-weight:bold; text-transform:uppercase; margin-left:10px; border:1px solid #a855f7;">${u.role}</span>
         </div>
-        <button onclick="deleteUser('${u._id}')" style="background:#ef4444; border-radius:5px; padding:5px 15px; margin:0; width:auto; font-weight:bold;">Remove</button>
+        <div style="width:120px;">
+          <button onclick="deleteUser('${u._id}')" class="btn-red">Remove</button>
+        </div>
       </div>
     `;
   });

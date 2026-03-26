@@ -208,6 +208,13 @@
 
     let questions = [];
 
+    // KAHOOT-STYLE AUDIO EFFECTS
+    const correctSound = new Audio('https://www.myinstants.com/media/sounds/correct-ding.mp3');
+    const wrongSound = new Audio('https://www.myinstants.com/media/sounds/wrong-buzzer.mp3');
+    // Preload them
+    correctSound.load();
+    wrongSound.load();
+
     async function loadQuestions() {
       try {
         const res = await fetch(`/api/questions/${grade}/${subject}`);
@@ -269,12 +276,16 @@
           score++;
           feedbackDiv.className = "answer-feedback correct";
           feedbackDiv.innerHTML = `✅ Correct!`;
+          // Play Kahoot style correct sound
+          correctSound.cloneNode(true).play().catch(e => console.log(e));
           // Mini confetti burst for each correct answer!
           confetti({ particleCount: 30, spread: 70, origin: { y: 0.8 }, zIndex: 100 });
         } else {
           feedbackDiv.className = "answer-feedback incorrect";
           const userAnswer = selected ? selected.value : "None";
           feedbackDiv.innerHTML = `❌ Incorrect. You chose: <b>${userAnswer}</b> <br><br>💡 The correct answer is: <b>${q.answer}</b>`;
+          // Play Kahoot style incorrect sound
+          wrongSound.cloneNode(true).play().catch(e => console.log(e));
         }
       });
 
