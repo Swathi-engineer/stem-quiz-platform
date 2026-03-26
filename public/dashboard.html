@@ -1,288 +1,315 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<title>Student Dashboard</title>
+  <meta charset="UTF-8">
+  <title>Student Dashboard</title>
 
-<style>
-body {
-  margin: 0;
-  font-family: Arial;
-  background: linear-gradient(135deg, #0f0f1a, #1a0033);
-  color: white;
-}
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial;
+      background: linear-gradient(135deg, #0f0f1a, #1a0033);
+      color: white;
+    }
 
-/* NAVBAR */
-.navbar {
-  display: flex;
-  justify-content: space-between;
-  background: #140024;
-  padding: 15px 30px;
-}
+    /* NAVBAR */
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      background: #140024;
+      padding: 15px 30px;
+    }
 
-.navbar a {
-  margin-right: 20px;
-  color: white;
-  text-decoration: none;
-  cursor: pointer;
-}
+    .navbar a {
+      margin-right: 20px;
+      color: white;
+      text-decoration: none;
+      cursor: pointer;
+    }
 
-.navbar a:hover {
-  color: #c084fc;
-}
+    .navbar a:hover {
+      color: #c084fc;
+    }
 
-.container {
-  padding: 30px;
-}
+    .container {
+      padding: 30px;
+    }
 
-.card {
-  background: #1e1e2f;
-  padding: 20px;
-  border-radius: 10px;
-  max-width: 500px;
-  margin: auto;
-  box-shadow: 0 0 10px purple;
-}
+    .card {
+      background: #1e1e2f;
+      padding: 20px;
+      border-radius: 10px;
+      max-width: 500px;
+      margin: auto;
+      box-shadow: 0 0 10px purple;
+    }
 
-/* HIDE SECTIONS */
-.section {
-  display: none;
-}
+    /* HIDE SECTIONS */
+    .section {
+      display: none;
+    }
 
-.active {
-  display: block;
-}
+    .active {
+      display: block;
+    }
 
-select, button {
-  width: 100%;
-  padding: 10px;
-  margin-top: 10px;
-  border-radius: 6px;
-  border: none;
-  background: #2c2c44;   /* dark background */
-  color: white;          /* white text */
-  appearance: none;      /* remove default style */
-  outline: none;
-}
+    select,
+    button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      border-radius: 6px;
+      border: none;
+      background: #2c2c44;
+      /* dark background */
+      color: white;
+      /* white text */
+      appearance: none;
+      /* remove default style */
+      outline: none;
+    }
 
-button {
-  background: #7c3aed;
-  color: white;
-}
+    button {
+      background: #7c3aed;
+      color: white;
+    }
 
-.result-box {
-  background: #2c2c44;
-  padding: 10px;
-  margin-top: 10px;
-  border-radius: 6px;
-}
+    .result-box {
+      background: #2c2c44;
+      padding: 10px;
+      margin-top: 10px;
+      border-radius: 6px;
+    }
 
-/* PERFORMANCE BAR */
-.bar {
-  height: 20px;
-  background: purple;
-  margin-top: 5px;
-  border-radius: 5px;
-}
+    /* PERFORMANCE BAR */
+    .bar {
+      height: 20px;
+      background: purple;
+      margin-top: 5px;
+      border-radius: 5px;
+    }
 
-/* BADGE ANIMATION */
-@keyframes levitate {
-  0% { transform: translateY(0px) scale(1); text-shadow: 0 0 10px rgba(253, 224, 71, 0.5); }
-  50% { transform: translateY(-10px) scale(1.1); text-shadow: 0 0 25px rgba(253, 224, 71, 1), 0 0 15px rgba(255, 255, 255, 0.8); }
-  100% { transform: translateY(0px) scale(1); text-shadow: 0 0 10px rgba(253, 224, 71, 0.5); }
-}
+    /* BADGE ANIMATION */
+    @keyframes levitate {
+      0% {
+        transform: translateY(0px) scale(1);
+        text-shadow: 0 0 10px rgba(253, 224, 71, 0.5);
+      }
 
-#badge {
-  text-align: center;
-  color: #fde047;
-  margin-bottom: 20px;
-  font-size: 2.5em; /* Make it large and proud! */
-  animation: levitate 2.5s ease-in-out infinite;
-  display: inline-block; /* Required for the transform animation to work perfectly */
-  width: 100%;
-  margin-top: 10px;
-}
-</style>
+      50% {
+        transform: translateY(-10px) scale(1.1);
+        text-shadow: 0 0 25px rgba(253, 224, 71, 1), 0 0 15px rgba(255, 255, 255, 0.8);
+      }
+
+      100% {
+        transform: translateY(0px) scale(1);
+        text-shadow: 0 0 10px rgba(253, 224, 71, 0.5);
+      }
+    }
+
+    #badge {
+      text-align: center;
+      color: #fde047;
+      margin-bottom: 20px;
+      font-size: 2.5em;
+      /* Make it large and proud! */
+      animation: levitate 2.5s ease-in-out infinite;
+      display: inline-block;
+      /* Required for the transform animation to work perfectly */
+      width: 100%;
+      margin-top: 10px;
+    }
+  </style>
 
 </head>
 
 <body>
 
-<!-- NAVBAR -->
-<div class="navbar">
-  <div>🎓 STEM Dashboard</div>
-  <div>
-    <a onclick="showSection('courses')">Courses</a>
-    <a onclick="showSection('results')">Results</a>
-    <a onclick="showSection('performance')">Performance</a>
-    <a onclick="logout()">Logout</a>
+  <!-- NAVBAR -->
+  <div class="navbar">
+    <div>🎓 STEM Dashboard</div>
+    <div>
+      <a onclick="showSection('courses')">Courses</a>
+      <a onclick="showSection('results')">Results</a>
+      <a onclick="showSection('performance')">Performance</a>
+      <a onclick="logout()">Logout</a>
+    </div>
   </div>
-</div>
 
-<div class="container">
+  <div class="container">
 
-<!-- COURSES -->
-<div id="courses" class="section active card">
-  <h3>📚 Select Course</h3>
+    <!-- COURSES -->
+    <div id="courses" class="section active card">
+      <h3>📚 Select Course</h3>
 
-  <select id="grade">
-    <option value="">Select Grade</option>
-    <option>1</option><option>2</option><option>3</option>
-    <option>4</option><option>5</option><option>6</option>
-    <option>7</option><option>8</option><option>9</option>
-    <option>10</option><option>11</option><option>12</option>
-  </select>
+      <select id="grade">
+        <option value="">Select Grade</option>
+        <option>1</option>
+        <option>2</option>
+        <option>3</option>
+        <option>4</option>
+        <option>5</option>
+        <option>6</option>
+        <option>7</option>
+        <option>8</option>
+        <option>9</option>
+        <option>10</option>
+        <option>11</option>
+        <option>12</option>
+      </select>
 
-  <select id="subject">
-    <option value="">Select Subject</option>
-    <option>Science</option>
-    <option>Technology</option>
-    <option>Engineering</option>
-    <option>Mathematics</option>
-  </select>
+      <select id="subject">
+        <option value="">Select Subject</option>
+        <option>Science</option>
+        <option>Technology</option>
+        <option>Engineering</option>
+        <option>Mathematics</option>
+      </select>
 
-  <button onclick="startQuiz()">Start Quiz 🚀</button>
-</div>
+      <button onclick="startQuiz()">Start Quiz 🚀</button>
+    </div>
 
-<!-- RESULTS -->
-<div id="results" class="section card">
-  <h3>📊 Your Results</h3>
+    <!-- RESULTS -->
+    <div id="results" class="section card">
+      <h3>📊 Your Results</h3>
 
-  <!-- Dynamic results list will go here via loadResults() -->
-  <div id="resultsList"></div>
-</div>
+      <!-- Dynamic results list will go here via loadResults() -->
+      <div id="resultsList"></div>
+    </div>
 
-<!-- PERFORMANCE -->
-<div id="performance" class="section card">
-  <h4 id="badge"></h4>
-  <p id="total">Total Quizzes: 0</p>
-  <p id="score">Average Score: 0%</p>
-  
-  <h3 style="margin-top:20px;">📊 Recent Activity</h3>
-  <div id="performance-bars">
-    <!-- Bars will be generated here -->
+    <!-- PERFORMANCE -->
+    <div id="performance" class="section card">
+      <h4 id="badge"></h4>
+      <p id="total">Total Quizzes: 0</p>
+      <p id="score">Average Score: 0%</p>
+
+      <h3 style="margin-top:20px;">📊 Recent Activity</h3>
+      <div id="performance-bars">
+        <!-- Bars will be generated here -->
+      </div>
+    </div>
+
   </div>
-</div>
 
-</div>
+  <script>
 
-<script>
+    // SWITCH SECTIONS
+    function showSection(sectionId) {
+      document.querySelectorAll(".section").forEach(sec => {
+        sec.classList.remove("active");
+      });
 
-// SWITCH SECTIONS
-function showSection(sectionId) {
-  document.querySelectorAll(".section").forEach(sec => {
-    sec.classList.remove("active");
-  });
+      document.getElementById(sectionId).classList.add("active");
+    }
 
-  document.getElementById(sectionId).classList.add("active");
-}
+    // START QUIZ
+    function startQuiz() {
+      const grade = document.getElementById("grade").value;
+      const subject = document.getElementById("subject").value;
 
-// START QUIZ
-function startQuiz() {
-  const grade = document.getElementById("grade").value;
-  const subject = document.getElementById("subject").value;
+      if (!grade || !subject) {
+        alert("Select grade & subject");
+        return;
+      }
 
-  if (!grade || !subject) {
-    alert("Select grade & subject");
-    return;
-  }
+      window.location.href = `quiz.html?grade=${grade}&subject=${subject}&email=${email}`;
+    }
 
-  window.location.href = `quiz.html?grade=${grade}&subject=${subject}&email=${email}`;
-}
+    // GET EMAIL FROM URL
+    const params = new URLSearchParams(window.location.search);
+    const email = params.get("email");
 
-// GET EMAIL FROM URL
-const params = new URLSearchParams(window.location.search);
-const email = params.get("email");
+    // LOAD PERFORMANCE
+    async function loadPerformance() {
 
-// LOAD PERFORMANCE
-async function loadPerformance() {
+      const res = await fetch("/api/scores");
+      const data = await res.json();
 
-  const res = await fetch("/api/scores");
-  const data = await res.json();
+      // 👉 FILTER ONLY CURRENT USER
+      const myData = data.filter(s => s.email === email);
 
-  // 👉 FILTER ONLY CURRENT USER
-  const myData = data.filter(s => s.email === email);
+      const totalQuizzes = myData.length;
 
-  const totalQuizzes = myData.length;
+      let totalScore = 0;
+      let totalMarks = 0;
 
-  let totalScore = 0;
-  let totalMarks = 0;
+      myData.forEach(s => {
+        totalScore += s.score;
+        totalMarks += s.total;
+      });
 
-  myData.forEach(s => {
-    totalScore += s.score;
-    totalMarks += s.total;
-  });
+      const percentage = totalMarks ? Math.round((totalScore / totalMarks) * 100) : 0;
 
-  const percentage = totalMarks ? Math.round((totalScore / totalMarks) * 100) : 0;
+      // DISPLAY
+      document.getElementById("total").innerText =
+        "Total Quizzes: " + totalQuizzes;
 
-  // DISPLAY
-  document.getElementById("total").innerText =
-    "Total Quizzes: " + totalQuizzes;
+      document.getElementById("score").innerText =
+        "Average Score: " + percentage + "%";
 
-  document.getElementById("score").innerText =
-    "Average Score: " + percentage + "%";
+      // BADGE
+      let badge = "🥉 Beginner";
 
-  // BADGE
-  let badge = "🥉 Beginner";
+      if (percentage >= 90) badge = "🏆 Master";
+      else if (percentage >= 70) badge = "🥇 Gold";
+      else if (percentage >= 50) badge = "🥈 Silver";
 
-  if (percentage >= 90) badge = "🏆 Master";
-  else if (percentage >= 70) badge = "🥇 Gold";
-  else if (percentage >= 50) badge = "🥈 Silver";
+      document.getElementById("badge").innerText = badge;
 
-  document.getElementById("badge").innerText = badge;
-  
-  // GENERATE PERFORMANCE BARS FOR RECENT QUIZZES
-  const barsContainer = document.getElementById("performance-bars");
-  barsContainer.innerHTML = "";
+      // GENERATE PERFORMANCE BARS FOR RECENT QUIZZES
+      const barsContainer = document.getElementById("performance-bars");
+      barsContainer.innerHTML = "";
 
-  if(myData.length === 0) {
-    barsContainer.innerHTML = "<p>No quizzes taken yet.</p>";
-  } else {
-    // Show last 5 quizzes
-    const recentActivity = myData.slice(-5);
-    recentActivity.forEach(s => {
-      const p = s.total ? Math.round((s.score / s.total) * 100) : 0;
-      barsContainer.innerHTML += `
+      if (myData.length === 0) {
+        barsContainer.innerHTML = "<p>No quizzes taken yet.</p>";
+      } else {
+        // Show last 5 quizzes
+        const recentActivity = myData.slice(-5);
+        recentActivity.forEach(s => {
+          const p = s.total ? Math.round((s.score / s.total) * 100) : 0;
+          barsContainer.innerHTML += `
         <p style="margin-top: 10px;">${s.subject} (Grade ${s.grade}) - ${p}%</p>
         <div class="bar" style="width: ${p}%"></div>
       `;
-    });
-  }
-}
+        });
+      }
+    }
 
-// LOAD RESULTS LIST
-async function loadResults() {
+    // LOAD RESULTS LIST
+    async function loadResults() {
 
-  const res = await fetch("/api/scores");
-  const data = await res.json();
+      const res = await fetch("/api/scores");
+      const data = await res.json();
 
-  const myData = data.filter(s => s.email === email);
+      const myData = data.filter(s => s.email === email);
 
-  const container = document.getElementById("resultsList");
-  container.innerHTML = "";
+      const container = document.getElementById("resultsList");
+      container.innerHTML = "";
 
-  myData.forEach(s => {
-    const percent = Math.round((s.score / s.total) * 100);
+      myData.forEach(s => {
+        const percent = Math.round((s.score / s.total) * 100);
 
-    container.innerHTML += `
+        container.innerHTML += `
       <div class="result-box">
         ${s.subject} | Grade ${s.grade}<br>
         Score: ${s.score}/${s.total} (${percent}%)
       </div>
     `;
-  });
-}
+      });
+    }
 
-// CALL FUNCTIONS
-loadPerformance();
-loadResults();
+    // CALL FUNCTIONS
+    loadPerformance();
+    loadResults();
 
-// LOGOUT
-function logout() {
-  window.location.href = "login.html";
-}
+    // LOGOUT
+    function logout() {
+      window.location.href = "login.html";
+    }
 
-</script>
+  </script>
 
 </body>
+
 </html>

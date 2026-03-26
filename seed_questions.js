@@ -135,22 +135,22 @@ mongoose.connect("mongodb://127.0.0.1:27017/stem_quiz").then(async () => {
   subjects.forEach(subject => {
     grades.forEach(grade => {
       let bracket = "";
-      if(grade >= 1 && grade <= 3) bracket = "1-3";
-      else if(grade >= 4 && grade <= 6) bracket = "4-6";
-      else if(grade >= 7 && grade <= 9) bracket = "7-9";
+      if (grade >= 1 && grade <= 3) bracket = "1-3";
+      else if (grade >= 4 && grade <= 6) bracket = "4-6";
+      else if (grade >= 7 && grade <= 9) bracket = "7-9";
       else bracket = "10-12";
 
       const qBank = banks[subject][bracket];
 
       // Insert those 5 questions
       qBank.forEach(qItem => {
-         toInsert.push({
-           question: `(Grade ${grade}) ` + qItem.q,
-           options: qItem.o,
-           answer: qItem.a,
-           subject: subject,
-           grade: grade
-         });
+        toInsert.push({
+          question: `(Grade ${grade}) ` + qItem.q,
+          options: qItem.o,
+          answer: qItem.a,
+          subject: subject,
+          grade: grade
+        });
       });
     });
   });
