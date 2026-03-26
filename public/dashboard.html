@@ -3,46 +3,191 @@
 <head>
 <meta charset="UTF-8">
 <title>Student Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
 <style>
 body {
   margin: 0;
-  font-family: Arial;
-  background: linear-gradient(135deg, #0f0f1a, #1a0033);
+  font-family: 'Outfit', sans-serif; /* Modern typography */
+  background: linear-gradient(45deg, #0f0f1a, #1a0033, #0b0726, #210d33);
+  background-size: 400% 400%;
+  animation: bgPulse 15s ease infinite; 
   color: white;
+}
+
+@keyframes bgPulse {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
 /* NAVBAR */
 .navbar {
   display: flex;
   justify-content: space-between;
-  background: #140024;
-  padding: 15px 30px;
+  align-items: center;
+  background: rgba(20, 0, 36, 0.85);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  padding: 10px 30px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.navbar-nav {
+  display: flex;
+  align-items: center;
 }
 
 .navbar a {
-  margin-right: 20px;
-  color: white;
+  margin-left: 20px;
+  color: #a0a0b0;
   text-decoration: none;
   cursor: pointer;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
 .navbar a:hover {
-  color: #c084fc;
+  color: white;
 }
 
+.navbar-stats {
+  display: flex;
+  gap: 15px;
+  font-weight: bold;
+}
+
+.streak { color: #ff9600; font-size: 1.2em; display: flex; align-items: center; gap: 5px; text-shadow: 0 0 10px rgba(255,150,0,0.5); }
+.xp { color: #1cb0f6; font-size: 1.2em; display: flex; align-items: center; gap: 5px; text-shadow: 0 0 10px rgba(28,176,246,0.5); }
+
 .container {
-  padding: 30px;
+  padding: 40px;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .card {
-  background: #1e1e2f;
-  padding: 20px;
-  border-radius: 10px;
-  max-width: 500px;
+  background: rgba(20, 20, 32, 0.65);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  padding: 40px;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
   margin: auto;
-  box-shadow: 0 0 10px purple;
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  width: 100%;
+  transition: all 0.3s ease;
 }
+
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 15px 40px rgba(0,0,0,0.6);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* MASCOT CHARACTER */
+.mascot-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20px;
+  margin-bottom: 25px;
+  animation: float 3s ease-in-out infinite;
+}
+
+.mascot {
+  font-size: 70px;
+  margin-right: 15px;
+  filter: drop-shadow(0px 8px 8px rgba(0,0,0,0.5));
+}
+
+.mascot-speech {
+  background: white;
+  color: #1a0033;
+  padding: 12px 18px;
+  border-radius: 20px;
+  border-bottom-left-radius: 0;
+  font-weight: bold;
+  font-size: 1.05em;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+  position: relative;
+  max-width: 200px;
+  border: 3px solid #e5e5e5;
+}
+
+/* Floating animation */
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-8px); }
+  100% { transform: translateY(0px); }
+}
+
+
+/* STAR CURSOR ANIMATION */
+@keyframes fall {
+  0% { transform: translateY(0) rotate(0deg) scale(1); opacity: 1; }
+  100% { transform: translateY(30px) rotate(180deg) scale(0.5); opacity: 0; }
+}
+
+/* GAMIFIED STATS ROW */
+.stats-row {
+  display: flex;
+  justify-content: space-around;
+  background: #2c2c44;
+  border-radius: 16px;
+  padding: 15px;
+  margin-bottom: 25px;
+  border: 2px solid #3d3d5c;
+  box-shadow: 0 4px 0 #1e1e2f;
+}
+
+.stat-box {
+  text-align: center;
+}
+
+.stat-value {
+  font-size: 1.4em;
+  font-weight: bold;
+}
+
+.stat-label {
+  font-size: 0.75em;
+  color: #a0a0b0;
+  text-transform: uppercase;
+  margin-top: 5px;
+  letter-spacing: 1px;
+  font-weight: bold;
+}
+
+/* SHOP */
+.shop-item {
+  background: #2c2c44;
+  border-radius: 12px;
+  padding: 15px;
+  margin-bottom: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 2px solid #3d3d5c;
+}
+
+.shop-item-info h4 { margin: 0; font-size: 1.1em; color: white; }
+.shop-item-info p { margin: 5px 0 0 0; color: #a0a0b0; font-size: 0.9em; }
+.shop-item-icon { font-size: 2em; margin-right: 15px; }
+
+.shop-buy-btn {
+  background: #1cb0f6;
+  border-bottom: 4px solid #1899d6;
+  width: auto;
+  padding: 10px 20px;
+  margin-top: 0;
+}
+.shop-buy-btn:hover { filter: brightness(1.1); }
 
 /* HIDE SECTIONS */
 .section {
@@ -53,21 +198,83 @@ body {
   display: block;
 }
 
-select, button {
+select {
   width: 100%;
-  padding: 10px;
+  padding: 12px;
   margin-top: 10px;
-  border-radius: 6px;
-  border: none;
+  border-radius: 12px;
+  border: 2px solid #3d3d5c;
   background: #2c2c44;   /* dark background */
   color: white;          /* white text */
   appearance: none;      /* remove default style */
   outline: none;
+  font-size: 16px;
 }
 
 button {
-  background: #7c3aed;
+  width: 100%;
+  padding: 15px;
+  margin-top: 15px;
+  border-radius: 12px;
+  border: none;
+  border-bottom: 4px solid #58a700;
+  background: #58cc02;
   color: white;
+  font-weight: bold;
+  font-size: 16px;
+  cursor: pointer;
+  transition: transform 0.1s, border-bottom 0.1s;
+}
+
+button:hover {
+  filter: brightness(1.1);
+}
+
+button:active {
+  transform: translateY(4px);
+  border-bottom: 0px solid #58cc02;
+}
+
+/* DUOLINGO QUESTS */
+.quest-card {
+  background: #2c2c44;
+  border: 2px solid #3d3d5c;
+  border-radius: 16px;
+  padding: 15px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+.quest-icon {
+  font-size: 35px;
+}
+.quest-info {
+  flex-grow: 1;
+}
+.quest-progress-bg {
+  background: #1e1e2f;
+  border-radius: 10px;
+  height: 14px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+.quest-progress-fill {
+  background: #ffc800;
+  height: 100%;
+  width: 0%; 
+  border-radius: 10px;
+  transition: width 0.5s ease-out;
+}
+.quest-title {
+  margin: 0;
+  font-weight: bold;
+  font-size: 1.1em;
+}
+.quest-desc {
+  margin: 5px 0 0 0;
+  font-size: 0.9em;
+  color: #a0a0b0;
 }
 
 .result-box {
@@ -102,6 +309,72 @@ button {
   width: 100%;
   margin-top: 10px;
 }
+
+/* PATH SELECTION (Kahoot/Duolingo style) */
+.path-selection {
+  background: #1e1e2f;
+  padding: 20px;
+  border-radius: 16px;
+  border: 2px solid #3d3d5c;
+  margin-bottom: 20px;
+}
+.selection-title {
+  font-weight: bold;
+  font-size: 1.1em;
+  margin-bottom: 10px;
+  margin-top: 15px;
+}
+.selection-title:first-child { margin-top: 0; }
+.grade-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 10px;
+  margin-bottom: 15px;
+}
+.grade-btn {
+  background: #2c2c44;
+  border: 2px solid #3d3d5c;
+  border-radius: 12px;
+  padding: 10px 0;
+  text-align: center;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.2s;
+}
+.grade-btn:hover { background: #3d3d5c; transform: scale(1.05); }
+.grade-btn.selected { background: #58cc02; border-color: #58a700; color: white; box-shadow: 0 4px 0 #58a700; transform: translateY(-2px); }
+
+.subject-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+.sub-btn {
+  border-radius: 12px;
+  padding: 15px 10px;
+  text-align: center;
+  font-weight: bold;
+  font-size: 1.1em;
+  cursor: pointer;
+  transition: 0.2s;
+  color: white;
+  border-bottom: 4px solid rgba(0,0,0,0.2);
+}
+.sub-btn:hover { transform: scale(1.05); filter: brightness(1.1); }
+.sub-btn.selected { transform: scale(0.95); border-bottom: 0; margin-top: 4px; border: 3px solid white; box-shadow: 0 0 15px white;}
+.k-red { background: #e21b3c; }
+.k-blue { background: #1368ce; }
+.k-yellow { background: #d89e00; }
+.k-green { background: #26890c; }
+
+.pulse-button {
+  animation: pulse 2s infinite;
+}
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.03); }
+  100% { transform: scale(1); }
+}
 </style>
 
 </head>
@@ -110,11 +383,15 @@ button {
 
 <!-- NAVBAR -->
 <div class="navbar">
-  <div>🎓 STEM Dashboard</div>
-  <div>
+  <div style="font-size: 1.5em; font-weight: bold; color: #58cc02; letter-spacing: 1px;">🦉 STEMingo</div>
+  
+
+
+  <div class="navbar-nav">
     <a onclick="showSection('courses')">Courses</a>
-    <a onclick="showSection('results')">Results</a>
     <a onclick="showSection('performance')">Performance</a>
+    <a onclick="showSection('leadership')">Leadership</a>
+    <a onclick="showSection('analysis')">Student Analysis</a>
     <a onclick="logout()">Logout</a>
   </div>
 </div>
@@ -123,37 +400,132 @@ button {
 
 <!-- COURSES -->
 <div id="courses" class="section active card">
-  <h3>📚 Select Course</h3>
+  
+  <!-- MASCOT -->
+  <div class="mascot-container" style="flex-direction: column;">
+    <div style="display:flex; align-items:center;">
+      <div class="mascot">🦉</div>
+      <div class="mascot-speech" id="mascot-msg">Ready to explore?</div>
+    </div>
+    
 
-  <select id="grade">
-    <option value="">Select Grade</option>
-    <option>1</option><option>2</option><option>3</option>
-    <option>4</option><option>5</option><option>6</option>
-    <option>7</option><option>8</option><option>9</option>
-    <option>10</option><option>11</option><option>12</option>
-  </select>
+  </div>
 
-  <select id="subject">
-    <option value="">Select Subject</option>
-    <option>Science</option>
-    <option>Technology</option>
-    <option>Engineering</option>
-    <option>Mathematics</option>
-  </select>
 
-  <button onclick="startQuiz()">Start Quiz 🚀</button>
+
+  <h3 style="color: #fff; margin-bottom: 20px;">📚 Choose Your Path</h3>
+
+  <div class="path-selection">
+    <p class="selection-title">1️⃣ Select Grade: <span id="grade-display" style="color:#fde047">None</span></p>
+    <div class="grade-grid">
+      <div class="grade-btn" onclick="setGrade(1, this)">1</div>
+      <div class="grade-btn" onclick="setGrade(2, this)">2</div>
+      <div class="grade-btn" onclick="setGrade(3, this)">3</div>
+      <div class="grade-btn" onclick="setGrade(4, this)">4</div>
+      <div class="grade-btn" onclick="setGrade(5, this)">5</div>
+      <div class="grade-btn" onclick="setGrade(6, this)">6</div>
+      <div class="grade-btn" onclick="setGrade(7, this)">7</div>
+      <div class="grade-btn" onclick="setGrade(8, this)">8</div>
+      <div class="grade-btn" onclick="setGrade(9, this)">9</div>
+      <div class="grade-btn" onclick="setGrade(10, this)">10</div>
+      <div class="grade-btn" onclick="setGrade(11, this)">11</div>
+      <div class="grade-btn" onclick="setGrade(12, this)">12</div>
+    </div>
+    
+    <p class="selection-title">2️⃣ Select Subject: <span id="subject-display" style="color:#fde047">None</span></p>
+    <div class="subject-grid">
+      <div class="sub-btn k-red" onclick="setSubject('Science', this)">🧬 Science</div>
+      <div class="sub-btn k-blue" onclick="setSubject('Technology', this)">💻 Tech</div>
+      <div class="sub-btn k-yellow" onclick="setSubject('Engineering', this)">⚙️ Eng</div>
+      <div class="sub-btn k-green" onclick="setSubject('Mathematics', this)">📐 Math</div>
+    </div>
+  </div>
+
+  <input type="hidden" id="grade" value="">
+  <input type="hidden" id="subject" value="">
+
+  <button onclick="startQuiz()" class="pulse-button">Ready? Let's Go! 🚀</button>
 </div>
 
-<!-- RESULTS -->
-<div id="results" class="section card">
-  <h3>📊 Your Results</h3>
+<!-- SHOP -->
+<div id="shop" class="section card">
+  <h3>💎 Gem Shop</h3>
+  <p style="color: #a0a0b0; margin-bottom: 20px;">Spend your hard-earned gems on cool upgrades!</p>
+  
+  <div class="shop-item">
+    <div style="display: flex; align-items: center;">
+      <div class="shop-item-icon">❄️</div>
+      <div class="shop-item-info">
+        <h4>Streak Freeze</h4>
+        <p>Keep your streak if you miss a day.</p>
+      </div>
+    </div>
+    <button class="shop-buy-btn" onclick="buyItem(50, 'Streak Freeze')">50 💎</button>
+  </div>
 
-  <!-- Dynamic results list will go here via loadResults() -->
+  <div class="shop-item">
+    <div style="display: flex; align-items: center;">
+      <div class="shop-item-icon">🎩</div>
+      <div class="shop-item-info">
+        <h4>Top Hat</h4>
+        <p>A fancy hat for STEMingo!</p>
+      </div>
+    </div>
+    <button class="shop-buy-btn" onclick="buyHat(200)">200 💎</button>
+  </div>
+</div>
+
+<!-- STUDENT ANALYSIS -->
+<div id="analysis" class="section card">
+  <h3>📈 Student Analysis</h3>
+  <p style="color: #a0a0b0;">Detailed breakdown of your learning progress.</p>
+  
+  <div class="stats-row" style="margin-top:20px;">
+    <div class="stat-box">
+      <div class="stat-value" style="color: #1cb0f6;"><span id="analysis-accuracy">0</span>%</div>
+      <div class="stat-label">Accuracy</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-value" style="color: #58cc02;">✔ <span id="analysis-completed">0</span></div>
+      <div class="stat-label">Quizzes</div>
+    </div>
+  </div>
+
+  <h4 style="margin-top:20px;">Past Results</h4>
   <div id="resultsList"></div>
 </div>
 
 <!-- PERFORMANCE -->
 <div id="performance" class="section card">
+
+  <!-- GAMIFIED STATS ROW -->
+  <div class="stats-row">
+    <div class="stat-box">
+      <div class="stat-value streak" style="color: #ff9600;">🔥 <span id="dash-streak">2</span></div>
+      <div class="stat-label">Day Streak</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-value xp" style="color: #1cb0f6;">⚡ <span id="dash-xp">0</span></div>
+      <div class="stat-label">Total XP</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-value" style="color: #fde047;">💎 <span id="dash-gems">50</span></div>
+      <div class="stat-label">Gems</div>
+    </div>
+  </div>
+
+  <!-- DAILY QUEST -->
+  <div class="quest-card">
+    <div class="quest-icon">📝</div>
+    <div class="quest-info">
+      <p class="quest-title">Daily Quest</p>
+      <p class="quest-desc">Complete 3 STEM lessons</p>
+      <div class="quest-progress-bg">
+        <div class="quest-progress-fill" id="quest-bar"></div>
+      </div>
+    </div>
+  </div>
+
   <h4 id="badge"></h4>
   <p id="total">Total Quizzes: 0</p>
   <p id="score">Average Score: 0%</p>
@@ -161,6 +533,39 @@ button {
   <h3 style="margin-top:20px;">📊 Recent Activity</h3>
   <div id="performance-bars">
     <!-- Bars will be generated here -->
+  </div>
+</div>
+
+<!-- LEADERSHIP -->
+<div id="leadership" class="section card">
+  <h3>🏆 Leadership Board</h3>
+  <p style="color: #a0a0b0;">Compete with other students and climb the ranks!</p>
+  <div class="shop-item" style="border-color: #fde047;">
+    <div style="display: flex; align-items: center;">
+      <div class="shop-item-icon">🥇</div>
+      <div class="shop-item-info">
+        <h4 style="color:#fde047;">Alex M.</h4>
+        <p>15,400 XP</p>
+      </div>
+    </div>
+  </div>
+  <div class="shop-item" style="border-color: #c0c0c0;">
+    <div style="display: flex; align-items: center;">
+      <div class="shop-item-icon">🥈</div>
+      <div class="shop-item-info">
+        <h4 style="color:#c0c0c0;">Sarah T.</h4>
+        <p>14,200 XP</p>
+      </div>
+    </div>
+  </div>
+  <div class="shop-item" style="border-color: #cd7f32;">
+    <div style="display: flex; align-items: center;">
+      <div class="shop-item-icon">🥉</div>
+      <div class="shop-item-info">
+        <h4 style="color:#cd7f32;">You</h4>
+        <p id="leaderboard-your-xp">0 XP</p>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -183,11 +588,57 @@ function startQuiz() {
   const subject = document.getElementById("subject").value;
 
   if (!grade || !subject) {
-    alert("Select grade & subject");
+    playSound('error');
+    alert("Please select both a grade and a subject to begin!");
     return;
   }
 
-  window.location.href = `quiz.html?grade=${grade}&subject=${subject}&email=${email}`;
+  playSound('start');
+
+  // Small delay so audio plays
+  setTimeout(() => {
+    window.location.href = `quiz.html?grade=${grade}&subject=${subject}&email=${email}`;
+  }, 400);
+}
+
+// SELECT PATH LOGIC
+function setGrade(val, el) {
+  document.getElementById("grade").value = val;
+  document.getElementById("grade-display").innerText = "Grade " + val;
+  
+  // Visual update
+  document.querySelectorAll(".grade-btn").forEach(btn => btn.classList.remove("selected"));
+  el.classList.add("selected");
+  
+  // Theme change
+  updateThemeForGrade(val);
+  playSound('click');
+}
+
+function setSubject(sub, el) {
+  document.getElementById("subject").value = sub;
+  document.getElementById("subject-display").innerText = sub;
+  
+  // Visual update
+  document.querySelectorAll(".sub-btn").forEach(btn => btn.classList.remove("selected"));
+  el.classList.add("selected");
+  
+  playSound('click');
+}
+
+function playSound(type) {
+  try {
+    if (type === 'click') {
+      let a = new Audio('https://www.myinstants.com/media/sounds/pop_drip.mp3');
+      a.volume = 0.5; a.play();
+    } else if (type === 'start') {
+      let a = new Audio('https://www.myinstants.com/media/sounds/kahoot-lobby-music.mp3');
+      a.volume = 0.5; a.play();
+    } else if (type === 'error') {
+      let a = new Audio('https://www.myinstants.com/media/sounds/wrong-answer.mp3');
+      a.volume = 0.5; a.play();
+    }
+  } catch(e){}
 }
 
 // GET EMAIL FROM URL
@@ -215,12 +666,59 @@ async function loadPerformance() {
 
   const percentage = totalMarks ? Math.round((totalScore / totalMarks) * 100) : 0;
 
+  // DUOLINGO XP (10 XP per correct answer/score)
+  const totalXP = totalScore * 10;
+  if(document.getElementById("nav-xp")) document.getElementById("nav-xp").innerText = totalXP;
+
+
+
+  // GAMIFIED STATS UPDATE
+  const streakDays = Math.floor(Math.random() * 5) + 2; // Mock streak
+  currentGems = totalXP * 3 + 120; // Mock gems to global
+  
+  if(document.getElementById("dash-xp")) document.getElementById("dash-xp").innerText = totalXP;
+  if(document.getElementById("dash-streak")) document.getElementById("dash-streak").innerText = streakDays;
+  if(document.getElementById("nav-streak")) document.getElementById("nav-streak").innerText = streakDays;
+  updateGemsDisplay();
+
+  // DAILY QUEST PROGRESS (Max 3 quizzes)
+  const questsCompleted = Math.min(totalQuizzes, 3);
+  const questProgress = (questsCompleted / 3) * 100;
+  document.getElementById("quest-bar").style.width = questProgress + "%";
+  document.querySelector(".quest-desc").innerText = `Complete 3 STEM lessons (${questsCompleted}/3)`;
+
+  // CELEBRATE WITH CONFETTI IF DAILY QUEST IS DONE
+  // Confetti effect disabled per request
+
+  // MASCOT MESSAGE UPDATE
+  const mascotMsg = document.getElementById("mascot-msg");
+  if (mascotMsg) {
+    const randomMsgs = [
+      "Hoo-hoo! Ready to level up? Pick your Grade and Subject to launch your rocket! 🚀",
+      "Which mission are we on today? Tap your Grade and Subject below! 🔭",
+      "Adventure awaits! Choose your Grade and pick a Subject to begin! 🗺️"
+    ];
+    // Pick a random gamified message!
+    mascotMsg.innerText = randomMsgs[Math.floor(Math.random() * randomMsgs.length)];
+  }
+
   // DISPLAY
   document.getElementById("total").innerText =
-    "Total Quizzes: " + totalQuizzes;
+    "Total Lessons: " + totalQuizzes;
 
   document.getElementById("score").innerText =
-    "Average Score: " + percentage + "%";
+    "Total XP Earned: " + totalXP + " XP";
+
+  if (document.getElementById("leaderboard-your-xp")) {
+    document.getElementById("leaderboard-your-xp").innerText = totalXP + " XP";
+  }
+  
+  if (document.getElementById("analysis-accuracy")) {
+    document.getElementById("analysis-accuracy").innerText = percentage;
+  }
+  if (document.getElementById("analysis-completed")) {
+    document.getElementById("analysis-completed").innerText = totalQuizzes;
+  }
 
   // BADGE
   let badge = "🥉 Beginner";
@@ -280,6 +778,51 @@ loadResults();
 // LOGOUT
 function logout() {
   window.location.href = "login.html";
+}
+
+// ====== SHOP LOGIC ======
+let currentGems = 0;
+
+function updateGemsDisplay() {
+  const gemElements = document.querySelectorAll("#dash-gems");
+  gemElements.forEach(el => el.innerText = currentGems);
+}
+
+function buyItem(cost, itemName) {
+  if (currentGems >= cost) {
+    currentGems -= cost;
+    updateGemsDisplay();
+    alert(`You successfully bought: ${itemName}!`);
+  } else {
+    alert("Not enough gems!");
+  }
+}
+
+function buyHat(cost) {
+  if (currentGems >= cost) {
+    currentGems -= cost;
+    updateGemsDisplay();
+    alert("Bought Top Hat! STEMingo looks fancy now!");
+    document.querySelector(".mascot").innerText = "🎩🦉";
+  } else {
+    alert("Not enough gems!");
+  }
+}
+
+// ====== DYNAMIC THEME BASED ON GRADE ======
+function updateThemeForGrade(grade) {
+  const mascot = document.querySelector(".mascot");
+  
+  if (grade >= 1 && grade <= 5) {
+    // 🟢 The Explorers (Grades 1-5): Cute
+    if(!mascot.innerText.includes("🎩")) mascot.innerText = "🦄";
+  } else if (grade >= 6 && grade <= 8) {
+    // 🔵 The Adventurers (Grades 6-8): Standard
+    if(!mascot.innerText.includes("🎩")) mascot.innerText = "🦉";
+  } else if (grade >= 9) {
+    // 🟣 The Scholars (Grades 9-12): Sci-fi
+    if(!mascot.innerText.includes("🎩")) mascot.innerText = "🤖";
+  }
 }
 
 </script>
