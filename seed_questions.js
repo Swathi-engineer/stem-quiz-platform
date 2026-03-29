@@ -143,29 +143,29 @@ mongoose.connect("mongodb://127.0.0.1:27017/stem_quiz").then(async () => {
   subjects.forEach(subject => {
     grades.forEach(grade => {
       let bracket = "";
-      if(grade >= 1 && grade <= 3) bracket = "1-3";
-      else if(grade >= 4 && grade <= 6) bracket = "4-6";
-      else if(grade >= 7 && grade <= 9) bracket = "7-9";
+      if (grade >= 1 && grade <= 3) bracket = "1-3";
+      else if (grade >= 4 && grade <= 6) bracket = "4-6";
+      else if (grade >= 7 && grade <= 9) bracket = "7-9";
       else bracket = "10-12";
 
       const qBank = banks[subject][bracket];
 
       // To ensure we have 15 questions per Grade & Subject (5 for Level 1, 5 for Level 2, 5 for Level 3)
       // We will loop through the bank 3 times, simulating slight progression in difficulty.
-      
-      for(let level = 1; level <= 3; level++) {
-          const levelName = level === 1 ? "Basic" : level === 2 ? "Intermediate" : "Hard";
-          qBank.forEach((qItem, index) => {
-             toInsert.push({
-               // Adding distinctive flair so the UI shows new questions per level
-               question: `[${levelName}] ${qItem.q}`,
-               options: qItem.o,
-               answer: qItem.a,
-               subject: subject,
-               grade: grade,
-               image: images[index % 5] // Add image to every question!
-             });
+
+      for (let level = 1; level <= 3; level++) {
+        const levelName = level === 1 ? "Basic" : level === 2 ? "Intermediate" : "Hard";
+        qBank.forEach((qItem, index) => {
+          toInsert.push({
+            // Adding distinctive flair so the UI shows new questions per level
+            question: `[${levelName}] ${qItem.q}`,
+            options: qItem.o,
+            answer: qItem.a,
+            subject: subject,
+            grade: grade,
+            image: images[index % 5] // Add image to every question!
           });
+        });
       }
     });
   });

@@ -375,6 +375,58 @@ button:active {
   50% { transform: scale(1.03); }
   100% { transform: scale(1); }
 }
+
+/* LEADERBOARD DUOLINGO STYLE */
+.podium-container {
+  display: flex; justify-content: center; align-items: flex-end;
+  margin-top: 0px; margin-bottom: 20px; gap: 8px;
+  padding-top: 50px;
+}
+.podium-spot {
+  display: flex; flex-direction: column; align-items: center;
+  width: 90px; position: relative;
+}
+.podium-avatar {
+  width: 55px; height: 55px; border-radius: 50%;
+  background: #3d3d5c; display: flex; justify-content: center; align-items: center;
+  font-size: 28px; margin-bottom: 8px; border: 3px solid #fff; z-index: 2; position: relative;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+}
+.podium-crown {
+  position: absolute; top: -35px; font-size: 26px; animation: levitate 2s infinite; z-index: 3;
+}
+.podium-name {
+  font-weight: bold; font-size: 0.9em; color: white; text-align: center;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; margin-bottom: 4px;
+}
+.podium-xp {
+  font-size: 0.75em; color: #ffc800; font-weight: bold; margin-bottom: 8px;
+  background: rgba(0,0,0,0.5); padding: 2px 8px; border-radius: 10px; z-index: 3;
+}
+.podium-step {
+  width: 100%; border-top-left-radius: 12px; border-top-right-radius: 12px;
+  display: flex; justify-content: center; padding-top: 10px;
+  font-size: 28px; font-weight: 900; color: rgba(255,255,255,0.7);
+  box-shadow: inset 0 20px 20px rgba(255,255,255,0.15); border: 2px solid rgba(255,255,255,0.2); border-bottom: none;
+}
+.podium-1 .podium-step { height: 110px; background: linear-gradient(180deg, #facc15, #ca8a04); }
+.podium-2 .podium-step { height: 80px; background: linear-gradient(180deg, #d1d5db, #9ca3af); }
+.podium-3 .podium-step { height: 60px; background: linear-gradient(180deg, #d97706, #b45309); }
+.podium-1 { order: 2; z-index: 3; }
+.podium-2 { order: 1; z-index: 2; }
+.podium-3 { order: 3; z-index: 1; }
+.podium-1 .podium-avatar { border-color: #fde047; }
+.podium-2 .podium-avatar { border-color: #e5e7eb; }
+.podium-3 .podium-avatar { border-color: #f59e0b; }
+
+.leaderboard-list { display: flex; flex-direction: column; gap: 8px; }
+.lb-row { display: flex; align-items: center; background: #2c2c44; padding: 12px 18px; border-radius: 14px; border: 2px solid #3d3d5c; }
+.lb-row.current-user { background: rgba(88, 204, 2, 0.15); border-color: #58cc02; }
+.lb-rank { font-size: 1.25em; font-weight: bold; color: #a0a0b0; width: 35px; }
+.lb-row.current-user .lb-rank { color: #58cc02; }
+.lb-avatar { width: 42px; height: 42px; border-radius: 50%; background: #1e1e2f; display: flex; justify-content: center; align-items: center; margin-right: 15px; font-size: 22px; }
+.lb-name { flex-grow: 1; font-weight: bold; font-size: 1.1em; }
+.lb-xp { font-weight: bold; color: #ffc800; }
 </style>
 
 </head>
@@ -384,19 +436,47 @@ button:active {
 <!-- NAVBAR -->
 <div class="navbar">
   <div style="font-size: 1.5em; font-weight: bold; color: #58cc02; letter-spacing: 1px;">🦉 STEMingo</div>
-  
-
 
   <div class="navbar-nav">
+    <div class="navbar-stats">
+      <div class="streak" title="Gems">💎 <span class="dash-gems">0</span></div>
+    </div>
     <a onclick="showSection('courses')">Courses</a>
-    <a onclick="showSection('performance')">Performance</a>
+    <a onclick="showSection('progress')">My Progress</a>
     <a onclick="showSection('leadership')">Leadership</a>
-    <a onclick="showSection('analysis')">Student Analysis</a>
+    <a onclick="openProfileModal()">Profile</a>
+    <a onclick="showSection('shop')">Avatar Shop</a>
     <a onclick="logout()">Logout</a>
   </div>
 </div>
 
 <div class="container">
+
+<div id="profile-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.8); z-index: 1000; justify-content: center; align-items: center;">
+  <div class="card" style="max-width: 400px; text-align: center;">
+    <h3>Edit Profile</h3>
+    <input type="text" id="profile-name" placeholder="Enter Display Name" style="width: 80%; padding: 10px; margin: 15px 0; border-radius: 8px; border: 1px solid #3d3d5c; background: #1e1e2f; color: white; font-size: 1.1em;" maxlength="15">
+    <br>
+    <button class="k-btn" onclick="saveProfile()" style="padding: 10px 20px; font-size: 1.1em; margin-bottom: 10px;">Save Settings</button>
+    <br>
+    <button class="k-btn" onclick="closeProfileModal()" style="background: transparent; border: 2px solid #58cc02; padding: 10px 20px; font-size: 1.1em;">Close</button>
+  </div>
+</div>
+
+<!-- AVATAR SHOP -->
+<div id="shop" class="section card">
+  <h3>💎 Avatar Shop</h3>
+  <p style="color: #a0a0b0;">Spend your gems to unlock premium avatars for the leaderboard!</p>
+  
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding: 15px; background: rgba(255,255,255,0.05); border-radius: 12px;">
+    <h4 style="margin: 0; color: #fde047;">Your Balance</h4>
+    <div style="font-size: 1.5em; font-weight: bold; color: #1cb0f6;">💎 <span class="dash-gems">0</span></div>
+  </div>
+
+  <div id="shop-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 15px;">
+    <!-- Avatars injected here -->
+  </div>
+</div>
 
 <!-- COURSES -->
 <div id="courses" class="section active card">
@@ -416,20 +496,9 @@ button:active {
   <h3 style="color: #fff; margin-bottom: 20px;">📚 Choose Your Path</h3>
 
   <div class="path-selection">
-    <p class="selection-title">1️⃣ Select Grade: <span id="grade-display" style="color:#fde047">None</span></p>
-    <div class="grade-grid">
-      <div class="grade-btn" onclick="setGrade(1, this)">1</div>
-      <div class="grade-btn" onclick="setGrade(2, this)">2</div>
-      <div class="grade-btn" onclick="setGrade(3, this)">3</div>
-      <div class="grade-btn" onclick="setGrade(4, this)">4</div>
-      <div class="grade-btn" onclick="setGrade(5, this)">5</div>
-      <div class="grade-btn" onclick="setGrade(6, this)">6</div>
-      <div class="grade-btn" onclick="setGrade(7, this)">7</div>
-      <div class="grade-btn" onclick="setGrade(8, this)">8</div>
-      <div class="grade-btn" onclick="setGrade(9, this)">9</div>
-      <div class="grade-btn" onclick="setGrade(10, this)">10</div>
-      <div class="grade-btn" onclick="setGrade(11, this)">11</div>
-      <div class="grade-btn" onclick="setGrade(12, this)">12</div>
+    <div style="background: rgba(88,204,2,0.1); border:2px solid #58cc02; border-radius:12px; padding: 15px; margin-bottom: 20px;">
+      <h4 style="margin: 0; color: #58cc02;">🎓 Your Assigned Class</h4>
+      <p style="margin: 5px 0 0 0; color: white; font-size: 1.2em; font-weight: bold;">Grade <span id="grade-display">Loading...</span></p>
     </div>
     
     <p class="selection-title">2️⃣ Select Subject: <span id="subject-display" style="color:#fde047">None</span></p>
@@ -480,31 +549,13 @@ button:active {
   </div>
 </div>
 
-<!-- STUDENT ANALYSIS -->
-<div id="analysis" class="section card">
-  <h3>📈 Student Analysis</h3>
-  <p style="color: #a0a0b0;">Detailed breakdown of your learning progress.</p>
-  
-  <div class="stats-row" style="margin-top:20px;">
-    <div class="stat-box">
-      <div class="stat-value" style="color: #1cb0f6;"><span id="analysis-accuracy">0</span>%</div>
-      <div class="stat-label">Accuracy</div>
-    </div>
-    <div class="stat-box">
-      <div class="stat-value" style="color: #58cc02;">✔ <span id="analysis-completed">0</span></div>
-      <div class="stat-label">Quizzes</div>
-    </div>
-  </div>
-
-  <h4 style="margin-top:20px;">Past Results</h4>
-  <div id="resultsList"></div>
-</div>
-
-<!-- PERFORMANCE -->
-<div id="performance" class="section card">
+<!-- MY PROGRESS -->
+<div id="progress" class="section card">
+  <h3>📈 My Progress</h3>
+  <p style="color: #a0a0b0;">A complete overview of your learning journey and gamified stats.</p>
 
   <!-- GAMIFIED STATS ROW -->
-  <div class="stats-row">
+  <div class="stats-row" style="margin-top:20px;">
     <div class="stat-box">
       <div class="stat-value streak" style="color: #ff9600;">🔥 <span id="dash-streak">2</span></div>
       <div class="stat-label">Day Streak</div>
@@ -514,30 +565,69 @@ button:active {
       <div class="stat-label">Total XP</div>
     </div>
     <div class="stat-box">
-      <div class="stat-value" style="color: #fde047;">💎 <span id="dash-gems">50</span></div>
-      <div class="stat-label">Gems</div>
+      <div class="stat-value" style="color: #58cc02;">✔ <span id="analysis-completed">0</span></div>
+      <div class="stat-label">Quizzes Taken</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-value" style="color: #a855f7;">⏱️ <span id="dash-time">0m</span></div>
+      <div class="stat-label">Time Spent</div>
     </div>
   </div>
 
-  <!-- DAILY QUEST -->
-  <div class="quest-card">
-    <div class="quest-icon">📝</div>
-    <div class="quest-info">
-      <p class="quest-title">Daily Quest</p>
-      <p class="quest-desc">Complete 3 STEM lessons</p>
-      <div class="quest-progress-bg">
-        <div class="quest-progress-fill" id="quest-bar"></div>
-      </div>
+  <div style="margin-top: 35px; margin-bottom: 35px;">
+    <h3 style="color:white; margin: 0 0 15px 0; font-weight: 400; font-size: 1.5em; letter-spacing: 0.5px;">Your Overall Accuracy</h3>
+    <div style="background: rgba(255,255,255,0.1); border-radius: 8px; height: 18px; position: relative; width: 100%;">
+       <div id="accuracy-fill" style="background: repeating-linear-gradient(45deg, #4ade80, #4ade80 15px, #22c55e 15px, #22c55e 30px); width: 0%; height: 100%; border-radius: 8px; transition: width 1s ease-out;"></div>
+       <div id="accuracy-label" style="position: absolute; top: -32px; left: 0%; transform: translateX(-50%); background: #2563eb; color: white; padding: 2px 8px; border-radius: 4px; font-weight: bold; font-size: 1.1em; transition: left 1s ease-out; box-shadow: 0 2px 5px rgba(0,0,0,0.2);">0%</div>
     </div>
   </div>
 
-  <h4 id="badge"></h4>
-  <p id="total">Total Quizzes: 0</p>
-  <p id="score">Average Score: 0%</p>
+  <p id="total" style="display:none;">Total Quizzes: 0</p>
+  <p id="score" style="display:none;">Average Score: 0%</p>
   
-  <h3 style="margin-top:20px;">📊 Recent Activity</h3>
-  <div id="performance-bars">
-    <!-- Bars will be generated here -->
+  <hr style="border-color: rgba(255,255,255,0.1); margin: 30px 0;">
+
+  <!-- CURRENT ASSIGNMENTS (TO DO) -->
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-top:20px;">
+    <h3 style="color:#fde047; margin: 0;">🎯 Current Assignments</h3>
+    <span style="color: #a0a0b0; font-size: 0.85em;">To-Do List</span>
+  </div>
+  <div id="assignments-todo" style="display: flex; flex-direction: column; gap: 15px; margin-top: 15px;">
+    <!-- Mocked Assignments -->
+    <div style="background: rgba(44, 44, 68, 0.8); border: 2px solid #eab308; border-radius: 15px; padding: 15px; display: flex; justify-content: space-between; align-items: center; transition: 0.2s;">
+      <div style="display: flex; gap: 15px; align-items: center;">
+        <div style="font-size: 2em;">🧬</div>
+        <div>
+          <h4 style="margin: 0; color: white;">Science (<span id="mock-grade-1">Grade 5</span>)</h4>
+          <p style="margin: 5px 0 0 0; font-size: 0.9em; color: #a0a0b0;">Unit: Ecosystems - Basic</p>
+          <span style="display: inline-block; margin-top: 8px; background: rgba(234, 179, 8, 0.2); color: #fde047; padding: 3px 8px; border-radius: 6px; font-size: 0.8em; font-weight: bold;">🗓️ Due by Friday</span>
+        </div>
+      </div>
+      <button class="k-btn" id="mock-btn-1" style="background: #eab308; border: none; font-weight: bold; border-radius: 10px; cursor: pointer; color: #1a0033; padding: 10px 20px;" onclick="window.location.href='quiz.html?subject=Science&lesson=Ecosystems&level=1&grade=' + (document.getElementById('grade').value || 5) + '&email=' + (typeof email !== 'undefined' ? email : '')">Start Now</button>
+    </div>
+
+    <div style="background: rgba(44, 44, 68, 0.8); border: 2px solid #1cb0f6; border-radius: 15px; padding: 15px; display: flex; justify-content: space-between; align-items: center; transition: 0.2s;">
+      <div style="display: flex; gap: 15px; align-items: center;">
+        <div style="font-size: 2em;">📐</div>
+        <div>
+          <h4 style="margin: 0; color: white;">Mathematics (<span id="mock-grade-2">Grade 5</span>)</h4>
+          <p style="margin: 5px 0 0 0; font-size: 0.9em; color: #a0a0b0;">Unit: Fractions - Interm.</p>
+          <span style="display: inline-block; margin-top: 8px; background: rgba(239, 68, 68, 0.2); color: #fca5a5; padding: 3px 8px; border-radius: 6px; font-size: 0.8em; font-weight: bold;">⚠️ Overdue!</span>
+        </div>
+      </div>
+      <button class="k-btn" id="mock-btn-2" style="background: #1cb0f6; border: none; font-weight: bold; border-radius: 10px; cursor: pointer; color: #fff; padding: 10px 20px;" onclick="window.location.href='quiz.html?subject=Mathematics&lesson=Fractions&level=2&grade=' + (document.getElementById('grade').value || 5) + '&email=' + (typeof email !== 'undefined' ? email : '')">Start Now</button>
+    </div>
+  </div>
+
+  <hr style="border-color: rgba(255,255,255,0.1); margin: 30px 0;">
+
+  <!-- COMPLETED / RECENT -->
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-top:20px;">
+    <h3 style="color:#58cc02; margin: 0;">✅ Recently Completed</h3>
+    <span style="color: #a0a0b0; font-size: 0.85em;">History</span>
+  </div>
+  <div id="assignments-completed" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px;">
+    <!-- Populated by JS -->
   </div>
 </div>
 
@@ -546,33 +636,9 @@ button:active {
   <h3>🏆 Leadership Board</h3>
   <p style="color: #a0a0b0;">Compete with other students and climb the ranks!</p>
   <div id="leadership-to-beat" style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 10px; margin-bottom: 20px; color: #fde047; font-weight: bold; text-align: center; border: 1px solid rgba(253, 224, 71, 0.4);">Loading ranking...</div>
-  <div class="shop-item" style="border-color: #fde047;">
-    <div style="display: flex; align-items: center;">
-      <div class="shop-item-icon">🥇</div>
-      <div class="shop-item-info">
-        <h4 style="color:#fde047;">Alex M.</h4>
-        <p>15,400 XP</p>
-      </div>
-    </div>
-  </div>
-  <div class="shop-item" style="border-color: #c0c0c0;">
-    <div style="display: flex; align-items: center;">
-      <div class="shop-item-icon">🥈</div>
-      <div class="shop-item-info">
-        <h4 style="color:#c0c0c0;">Sarah T.</h4>
-        <p>14,200 XP</p>
-      </div>
-    </div>
-  </div>
-  <div class="shop-item" style="border-color: #cd7f32;">
-    <div style="display: flex; align-items: center;">
-      <div class="shop-item-icon">🥉</div>
-      <div class="shop-item-info">
-        <h4 style="color:#cd7f32;">You</h4>
-        <p id="leaderboard-your-xp">0 XP</p>
-      </div>
-    </div>
-  </div>
+  
+  <div id="leaderboard-podium" class="podium-container"></div>
+  <div id="leaderboard-list" class="leaderboard-list"></div>
 </div>
 
 </div>
@@ -685,8 +751,49 @@ function playSound(type) {
 const params = new URLSearchParams(window.location.search);
 const email = params.get("email");
 
+let userProfile = { displayName: "", avatar: "🧑‍🚀", unlockedAvatars: ["🧑‍🚀"], spentGems: 0 };
+
+async function fetchProfile() {
+  if (!email) return;
+  try {
+    const res = await fetch(`/api/auth/profile/${email}`);
+    if(res.ok) {
+        userProfile = await res.json();
+        const g = userProfile.grade || 5;
+        document.getElementById("grade").value = g;
+        if(document.getElementById("grade-display")) document.getElementById("grade-display").innerText = g;
+        if(document.getElementById("mock-grade-1")) document.getElementById("mock-grade-1").innerText = `Grade ${g}`;
+        if(document.getElementById("mock-grade-2")) document.getElementById("mock-grade-2").innerText = `Grade ${g}`;
+        if(typeof updateThemeForGrade === 'function') updateThemeForGrade(g);
+    }
+  } catch(e){}
+}
+
+async function saveProfile() {
+  const nameInput = document.getElementById("profile-name").value;
+  if (!nameInput) return alert("Please enter a name!");
+  
+  const res = await fetch("/api/auth/profile/update", {
+     method: "POST", headers: { "Content-Type": "application/json" },
+     body: JSON.stringify({ email: email, displayName: nameInput })
+  });
+  if(res.ok) {
+     userProfile.displayName = nameInput;
+     alert("Profile saved! Name will appear on Leaderboard.");
+     closeProfileModal();
+     loadPerformance();
+  }
+}
+
+function openProfileModal() {
+  document.getElementById("profile-name").value = userProfile.displayName || email.split('@')[0];
+  document.getElementById("profile-modal").style.display = "flex";
+}
+function closeProfileModal() { document.getElementById("profile-modal").style.display = "none"; }
+
 // LOAD PERFORMANCE
 async function loadPerformance() {
+  await fetchProfile();
 
   const res = await fetch("/api/scores");
   const data = await res.json();
@@ -714,21 +821,43 @@ async function loadPerformance() {
 
   // GAMIFIED STATS UPDATE
   const streakDays = Math.floor(Math.random() * 5) + 2; // Mock streak
-  currentGems = totalXP * 3 + 120; // Mock gems to global
+  currentGems = (totalXP * 3 + 120) - (userProfile.spentGems || 0);
   
   if(document.getElementById("dash-xp")) document.getElementById("dash-xp").innerText = totalXP;
   if(document.getElementById("dash-streak")) document.getElementById("dash-streak").innerText = streakDays;
   if(document.getElementById("nav-streak")) document.getElementById("nav-streak").innerText = streakDays;
   updateGemsDisplay();
+  if(typeof renderShop === 'function') renderShop();
 
-  // DAILY QUEST PROGRESS (Max 3 quizzes)
-  const questsCompleted = Math.min(totalQuizzes, 3);
-  const questProgress = (questsCompleted / 3) * 100;
-  document.getElementById("quest-bar").style.width = questProgress + "%";
-  document.querySelector(".quest-desc").innerText = `Complete 3 STEM lessons (${questsCompleted}/3)`;
+  // POPULATE RECENTLY COMPLETED ASSIGNMENTS
+  const completedVars = document.getElementById("assignments-completed");
+  if(completedVars) {
+    completedVars.innerHTML = "";
+    if(myData.length === 0) {
+      completedVars.innerHTML = "<p style='grid-column: 1/-1; color:#a0a0b0;'>No assignments completed yet. Look at your To-Do list!</p>";
+    } else {
+      // Get last 4 completed assignments
+      const recent = [...myData].slice(-4).reverse();
+      recent.forEach(s => {
+        const p = s.total ? Math.round((s.score / s.total) * 100) : 0;
+        
+        let subIcon = "🧬";
+        if(s.subject === "Mathematics") subIcon = "📐";
+        if(s.subject === "Technology") subIcon = "💻";
+        if(s.subject === "Engineering") subIcon = "⚙️";
 
-  // CELEBRATE WITH CONFETTI IF DAILY QUEST IS DONE
-  // Confetti effect disabled per request
+        completedVars.innerHTML += `
+          <div style="background: rgba(88, 204, 2, 0.1); border: 2px solid rgba(88, 204, 2, 0.4); border-radius: 12px; padding: 15px; display: flex; align-items: center; gap: 15px;">
+            <div style="font-size: 1.8em;">${subIcon}</div>
+            <div>
+              <h4 style="margin: 0; color: #58cc02; font-size:1.1em;">${s.subject}</h4>
+              <p style="margin: 3px 0 0 0; font-size: 0.85em; color: #a0a0b0;">Grade ${s.grade} • Level ${s.level || 1} • Score: ${p}%</p>
+            </div>
+          </div>
+        `;
+      });
+    }
+  }
 
   // MASCOT MESSAGE UPDATE
   const mascotMsg = document.getElementById("mascot-msg");
@@ -753,77 +882,114 @@ async function loadPerformance() {
     document.getElementById("leaderboard-your-xp").innerText = totalXP + " XP";
   }
   
-  if (document.getElementById("analysis-accuracy")) {
-    document.getElementById("analysis-accuracy").innerText = percentage;
+  if (document.getElementById("accuracy-fill")) {
+    document.getElementById("accuracy-fill").style.width = percentage + "%";
+    document.getElementById("accuracy-label").style.left = percentage + "%";
+    document.getElementById("accuracy-label").innerText = percentage + "%";
   }
+  
   if (document.getElementById("analysis-completed")) {
     document.getElementById("analysis-completed").innerText = totalQuizzes;
   }
 
-  // BADGE
-  let badge = "🥉 Beginner";
-
-  if (percentage >= 90) badge = "🏆 Master";
-  else if (percentage >= 70) badge = "🥇 Gold";
-  else if (percentage >= 50) badge = "🥈 Silver";
-
-  document.getElementById("badge").innerText = badge;
+  const timeSpentMins = totalQuizzes * 5;
+  let timeStr = timeSpentMins + "m";
+  if (timeSpentMins >= 60) timeStr = (timeSpentMins / 60).toFixed(1) + "h";
+  if (document.getElementById("dash-time")) document.getElementById("dash-time").innerText = timeStr;
   
-  // Update Leaderboard Target XP to beat
-  const targetXP = 15400; // Top player Alex M.
-  const remaining = targetXP - totalXP;
-  const msgEl = document.getElementById("leadership-to-beat");
-  if(msgEl) {
-     if(remaining > 0) msgEl.innerHTML = `You need <b>${remaining.toLocaleString()} more XP</b> to beat Alex M. and claim the #1 spot! Keep grinding! 💪`;
-     else msgEl.innerHTML = `Wow! You are currently the #1 rank leader! Amazing! 🏆`;
-  }
-
-  
-  // GENERATE PERFORMANCE BARS FOR RECENT QUIZZES
-  const barsContainer = document.getElementById("performance-bars");
-  barsContainer.innerHTML = "";
-
-  if(myData.length === 0) {
-    barsContainer.innerHTML = "<p>No quizzes taken yet.</p>";
-  } else {
-    // Show last 5 quizzes
-    const recentActivity = myData.slice(-5);
-    recentActivity.forEach(s => {
-      const p = s.total ? Math.round((s.score / s.total) * 100) : 0;
-      barsContainer.innerHTML += `
-        <p style="margin-top: 10px;">${s.subject} (Grade ${s.grade}) - ${p}%</p>
-        <div class="bar" style="width: ${p}%"></div>
-      `;
-    });
-  }
-}
-
-// LOAD RESULTS LIST
-async function loadResults() {
-
-  const res = await fetch("/api/scores");
-  const data = await res.json();
-
-  const myData = data.filter(s => s.email === email);
-
-  const container = document.getElementById("resultsList");
-  container.innerHTML = "";
-
-  myData.forEach(s => {
-    const percent = Math.round((s.score / s.total) * 100);
-
-    container.innerHTML += `
-      <div class="result-box">
-        ${s.subject} | Grade ${s.grade}<br>
-        Score: ${s.score}/${s.total} (${percent}%)
-      </div>
-    `;
+  // Update Leaderboard fully dynamically based on all user XP Data
+  const userXpMap = {};
+  data.forEach(s => {
+    if (!s.email) return;
+    if (!userXpMap[s.email]) userXpMap[s.email] = 0;
+    userXpMap[s.email] += s.score * 10;
   });
+
+  if (email && !userXpMap[email]) userXpMap[email] = totalXP;
+
+  // FETCH USERS FROM BACKEND FOR PROFILES
+  let allUsers = [];
+  try {
+     const resUsers = await fetch("/api/auth/users");
+     if(resUsers.ok) allUsers = await resUsers.json();
+  } catch(e) {}
+  
+  const userDbMap = {};
+  allUsers.forEach(u => userDbMap[u.email] = u);
+
+  const leaderboard = Object.keys(userXpMap).map(e => {
+    const dbU = userDbMap[e] || {};
+    return {
+      email: e,
+      name: dbU.displayName || e.split('@')[0],
+      avatar: dbU.avatar || "🧑‍🚀",
+      xp: userXpMap[e]
+    };
+  }).sort((a, b) => b.xp - a.xp);
+
+  const fakes = [{n:'Alex M.',x:15400},{n:'Sarah T.',x:14200},{n:'John D.',x:12000},{n:'Emma W.',x:9000},{n:'Chris P.',x:5000}];
+  if (leaderboard.length < 5) {
+      fakes.forEach(f => {
+          if(!leaderboard.find(l => l.name === f.n)) leaderboard.push({email: f.n, name: f.n, avatar: "🧑‍🚀", xp: f.x});
+      });
+  }
+  leaderboard.sort((a, b) => b.xp - a.xp);
+
+  const userRankIndex = leaderboard.findIndex(l => l.email === email);
+  const msgEl = document.getElementById("leadership-to-beat");
+  if(msgEl && userRankIndex !== -1) {
+     if(userRankIndex > 0) {
+        const pAbove = leaderboard[userRankIndex - 1];
+        const diff = pAbove.xp - leaderboard[userRankIndex].xp + 10;
+        msgEl.innerHTML = `You need <b style="color:#ffc800">${diff.toLocaleString()} more XP</b> to beat <b>${pAbove.name}</b> and move up! Keep grinding! 💪`;
+     } else {
+        msgEl.innerHTML = `Wow! You are currently the #1 rank leader! Amazing! 🏆`;
+     }
+  }
+
+  const podiumEl = document.getElementById("leaderboard-podium");
+  if(podiumEl) {
+    podiumEl.innerHTML = '';
+    for (let i = 0; i < 3; i++) {
+      if (!leaderboard[i]) continue;
+      const p = leaderboard[i];
+      const rankNum = i + 1;
+      const isMe = (p.email === email);
+      const crown = rankNum === 1 ? '<div class="podium-crown">👑</div>' : '';
+      podiumEl.innerHTML += `
+        <div class="podium-spot podium-${rankNum}">
+          ${crown}
+          <div class="podium-avatar">${p.avatar}</div>
+          <div class="podium-name">${isMe ? 'You' : p.name}</div>
+          <div class="podium-xp">${p.xp} XP</div>
+          <div class="podium-step">${rankNum}</div>
+        </div>
+      `;
+    }
+  }
+
+  const listEl = document.getElementById("leaderboard-list");
+  if(listEl) {
+    listEl.innerHTML = '';
+    for (let i = 3; i < leaderboard.length; i++) {
+      const p = leaderboard[i];
+      const isMe = (p.email === email);
+      listEl.innerHTML += `
+        <div class="lb-row ${isMe ? 'current-user' : ''}">
+          <div class="lb-rank">${i + 1}</div>
+          <div class="lb-avatar">${p.avatar}</div>
+          <div class="lb-name">${isMe ? 'You (Me)' : p.name}</div>
+          <div class="lb-xp">${p.xp} XP</div>
+        </div>
+      `;
+    }
+  }
+
+  
 }
 
 // CALL FUNCTIONS
 loadPerformance();
-loadResults();
 
 // LOGOUT
 function logout() {
@@ -834,28 +1000,77 @@ function logout() {
 let currentGems = 0;
 
 function updateGemsDisplay() {
-  const gemElements = document.querySelectorAll("#dash-gems");
+  const gemElements = document.querySelectorAll(".dash-gems");
   gemElements.forEach(el => el.innerText = currentGems);
 }
 
-function buyItem(cost, itemName) {
-  if (currentGems >= cost) {
-    currentGems -= cost;
-    updateGemsDisplay();
-    alert(`You successfully bought: ${itemName}!`);
-  } else {
-    alert("Not enough gems!");
+const shopItems = [
+  { emoji: "🧑‍🚀", price: 0, name: "Astronaut" },
+  { emoji: "👩‍🔬", price: 0, name: "Scientist" },
+  { emoji: "🤖", price: 300, name: "Robot" },
+  { emoji: "🧛", price: 500, name: "Vampire" },
+  { emoji: "🧜‍♀️", price: 500, name: "Mermaid" },
+  { emoji: "🦸‍♂️", price: 800, name: "Superhero" },
+  { emoji: "🧟", price: 1000, name: "Zombie" },
+  { emoji: "🧝‍♀️", price: 1200, name: "Elf" },
+  { emoji: "👑", price: 5000, name: "Royalty" }
+];
+
+function renderShop() {
+  const grid = document.getElementById("shop-grid");
+  if(!grid) return;
+  grid.innerHTML = "";
+  
+  shopItems.forEach(item => {
+    const isOwned = userProfile.unlockedAvatars.includes(item.emoji);
+    const isActive = userProfile.avatar === item.emoji;
+    
+    let btnHtml = "";
+    if (isActive) btnHtml = `<button class="k-btn" disabled style="background:#58cc02; border:none; padding: 8px; font-weight:bold; font-size:0.9em; margin-top:10px; width:100%">Equipped</button>`;
+    else if (isOwned) btnHtml = `<button class="k-btn" onclick="equipAvatar('${item.emoji}')" style="background:#1cb0f6; border:none; padding: 8px; font-weight:bold; font-size:0.9em; margin-top:10px; width:100%; cursor:pointer;">Equip</button>`;
+    else btnHtml = `<button class="k-btn" onclick="buyAvatar('${item.emoji}', ${item.price})" style="background:#fde047; color:#1a0033; border:none; padding: 8px; font-weight:bold; font-size:0.9em; margin-top:10px; width:100%; cursor:pointer;">Buy 💎${item.price}</button>`;
+
+    grid.innerHTML += `
+      <div style="background: #2c2c44; padding: 20px 10px; border-radius: 12px; text-align: center; border: 2px solid ${isActive ? '#58cc02' : '#3d3d5c'}; transition: transform 0.2s; cursor: pointer;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+        <div style="font-size: 50px; margin-bottom: 10px;">${item.emoji}</div>
+        <div style="font-size: 0.9em; font-weight: bold; color: #fff; margin-bottom: 5px;">${item.name}</div>
+        ${btnHtml}
+      </div>
+    `;
+  });
+}
+
+async function equipAvatar(emoji) {
+  const res = await fetch("/api/auth/profile/update", {
+     method: "POST", headers: { "Content-Type": "application/json" },
+     body: JSON.stringify({ email: email, avatar: emoji })
+  });
+  if(res.ok) {
+     userProfile.avatar = emoji;
+     renderShop();
+     loadPerformance();
   }
 }
 
-function buyHat(cost) {
-  if (currentGems >= cost) {
-    currentGems -= cost;
-    updateGemsDisplay();
-    alert("Bought Top Hat! STEMingo looks fancy now!");
-    document.querySelector(".mascot").innerText = "🎩🦉";
+async function buyAvatar(emoji, cost) {
+  if (currentGems < cost) return alert("You don't have enough gems!");
+  
+  const res = await fetch("/api/auth/profile/buy", {
+     method: "POST", headers: { "Content-Type": "application/json" },
+     body: JSON.stringify({ email: email, avatar: emoji, cost: cost })
+  });
+  const data = await res.json();
+  if (data.success) {
+     userProfile.unlockedAvatars.push(emoji);
+     userProfile.avatar = emoji; // auto equip
+     userProfile.spentGems += cost;
+     currentGems -= cost;
+     updateGemsDisplay();
+     renderShop();
+     loadPerformance(); // update leaderboard instantly
+     alert("Avatar unlocked and equipped! Looking great!");
   } else {
-    alert("Not enough gems!");
+     alert(data.message);
   }
 }
 
