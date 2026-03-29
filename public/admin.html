@@ -140,7 +140,6 @@ button:active { transform: translateY(4px); border-bottom: 0px solid transparent
     <input type="password" id="newPass" placeholder="Password" />
     <div class="full-width">
       <select id="newRole">
-        <option value="student">Student Account</option>
         <option value="teacher">Teacher Account</option>
         <option value="admin">Admin Account</option>
       </select>
@@ -157,7 +156,7 @@ button:active { transform: translateY(4px); border-bottom: 0px solid transparent
 
 <!-- PERFORMANCE / ANALYTICS SECTION -->
 <div id="performance" class="section card">
-  <h3 style="color:#c084fc; border-bottom: 2px solid #c084fc; padding-bottom:10px;">🎓 Student Analytics</h3>
+  <h3 style="color:#c084fc; border-bottom: 2px solid #c084fc; padding-bottom:10px;">🏫 School-Wide Analytics</h3>
   <div id="scoreList" style="margin-bottom: 40px;"></div>
 
   <h3 style="color:#22c55e; border-bottom: 2px solid #22c55e; padding-bottom:10px;">👩‍🏫 Active Teachers</h3>
@@ -243,37 +242,37 @@ async function loadScores() {
   const usersRes = await fetch("/api/auth/users");
   const users = await usersRes.json();
 
-  // STUDENT ANALYTICS (Aggregated)
+  // BIRD'S EYE SCHOOL ANALYTICS (Aggregated by Grade)
   const container = document.getElementById("scoreList");
   container.innerHTML = "";
   
-  const studentData = {};
+  const gradeData = {};
   scores.forEach(s => {
-    if(!studentData[s.email]) studentData[s.email] = { totalQuizzes: 0, totalScore: 0, totalMax: 0 };
-    studentData[s.email].totalQuizzes += 1;
-    studentData[s.email].totalScore += s.score;
-    studentData[s.email].totalMax += s.total;
+    if(!gradeData[s.grade]) gradeData[s.grade] = { totalQuizzes: 0, totalScore: 0, totalMax: 0 };
+    gradeData[s.grade].totalQuizzes += 1;
+    gradeData[s.grade].totalScore += s.score;
+    gradeData[s.grade].totalMax += s.total;
   });
 
-  for(const [email, data] of Object.entries(studentData)) {
+  for(const [grade, data] of Object.entries(gradeData)) {
     const percent = Math.round((data.totalScore / data.totalMax) * 100) || 0;
-    let badge = percent >= 90 ? "🏆 Master" : percent >= 70 ? "🥇 Gold" : percent >= 50 ? "🥈 Silver" : "🥉 Beginner";
+    let rank = percent >= 90 ? "Excellent" : percent >= 70 ? "Good" : percent >= 50 ? "Needs Improvement" : "Critical Warning";
 
     container.innerHTML += `
       <div class="score-box" style="display:flex; justify-content:space-between; align-items:center; border-left: 4px solid #c084fc;">
         <div>
-          <b style="color:#e9d5ff; font-size:1.1em;">${email}</b><br>
-          <span style="color:#aaa;">Quizzes Finished: ${data.totalQuizzes}</span>
+          <b style="color:#e9d5ff; font-size:1.1em;">🏫 Grade ${grade}</b><br>
+          <span style="color:#aaa;">Total Assessments: ${data.totalQuizzes}</span>
         </div>
         <div style="text-align:right;">
-          <span style="font-size:1.3em; font-weight:bold; color:#4ade80;">${percent}%</span><br>
-          <span style="font-size:0.9em; text-shadow:0 0 5px #fde047;">${badge}</span>
+          <span style="font-size:1.3em; font-weight:bold; color:#4ade80;">${percent}% Average</span><br>
+          <span style="font-size:0.9em; text-shadow:0 0 5px #fde047;">${rank}</span>
         </div>
       </div>
     `;
   }
 
-  if(Object.keys(studentData).length === 0) container.innerHTML = "<p style='color:#aaa; font-style:italic;'>No student scores found yet.</p>";
+  if(Object.keys(gradeData).length === 0) container.innerHTML = "<p style='color:#aaa; font-style:italic;'>No school data found yet.</p>";
 
   // TEACHER ANALYTICS
   // First fetch questions to count them!

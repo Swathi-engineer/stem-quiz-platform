@@ -6,6 +6,8 @@ const scoreSchema = new mongoose.Schema({
   total: Number,
   subject: String,
   grade: Number,
+  level: Number,
+  lesson: String,
   date: {
     type: Date,
     default: Date.now

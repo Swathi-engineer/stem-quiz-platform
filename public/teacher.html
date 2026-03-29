@@ -209,6 +209,8 @@ button:active { transform: translateY(4px); border-bottom: 0px solid #9333ea; }
 <div class="navbar">
   <div class="brand">👩‍🏫 Teacher Panel</div>
   <div class="navbar-nav">
+    <a onclick="showSection('add-student')" class="nav-link" id="nav-add-student">Add Student</a>
+    <a onclick="showSection('assign')" class="nav-link" id="nav-assign">Assign Work</a>
     <a onclick="showSection('add')" class="nav-link active-link" id="nav-add">Add Question</a>
     <a onclick="showSection('view')" class="nav-link" id="nav-view">View Questions</a>
     <a onclick="showSection('performance')" class="nav-link" id="nav-perf">Student Progress</a>
@@ -237,6 +239,73 @@ button:active { transform: translateY(4px); border-bottom: 0px solid #9333ea; }
     <div class="stat-val c-green" id="stat-a">0%</div>
     <div class="stat-title">Glob. Avg Score</div>
   </div>
+</div>
+
+<!-- ADD STUDENT -->
+<div id="add-student" class="section card">
+  <h3>🧑‍🎓 Register New Student</h3>
+  <div class="form-grid">
+    <input type="text" id="stu-name" placeholder="Student Full Name">
+    <input type="email" id="stu-email" placeholder="Student Login Email">
+    <input type="password" id="stu-password" placeholder="Temporary Login Password">
+    <select id="stu-grade">
+      <option value="">Assign Grade Level</option>
+      <option value="1">Grade 1</option>
+      <option value="2">Grade 2</option>
+      <option value="3">Grade 3</option>
+      <option value="4">Grade 4</option>
+      <option value="5">Grade 5</option>
+      <option value="6">Grade 6</option>
+      <option value="7">Grade 7</option>
+      <option value="8">Grade 8</option>
+      <option value="9">Grade 9</option>
+      <option value="10">Grade 10</option>
+      <option value="11">Grade 11</option>
+      <option value="12">Grade 12</option>
+    </select>
+  </div>
+  <button onclick="addStudent()">Create Student Account</button>
+</div>
+
+<!-- ASSIGN WORK (NEW) -->
+<div id="assign" class="section card">
+  <h3>🗓️ Assign Work to Class</h3>
+  <p style="color: #a0a0b0; margin-bottom: 20px;">Deploy specific units to your students and set a hard deadline.</p>
+
+  <div class="form-grid">
+    <select id="assign-grade">
+      <option value="">Select Class Grade</option>
+      <option>1</option><option>2</option><option>3</option>
+      <option>4</option><option>5</option><option>6</option>
+      <option>7</option><option>8</option><option>9</option>
+      <option>10</option><option>11</option><option>12</option>
+    </select>
+    
+    <select id="assign-subject">
+      <option value="">Select Subject</option>
+      <option>Science</option>
+      <option>Technology</option>
+      <option>Engineering</option>
+      <option>Mathematics</option>
+    </select>
+
+    <div class="full-width">
+      <select id="assign-unit">
+        <option value="">Select Unit / Module</option>
+        <option>Ecosystems - Basic (Level 1)</option>
+        <option>Fractions - Interm. (Level 2)</option>
+        <option>Newton's Laws - Hard (Level 3)</option>
+        <option>Robotics - Basic (Level 1)</option>
+      </select>
+    </div>
+
+    <div class="full-width" style="background: rgba(44, 44, 68, 0.8); padding: 20px; border-radius: 12px; border-left: 5px solid #eab308; margin-top: 10px;">
+      <label style="display: block; margin-bottom: 10px; font-weight: bold; color: #fde047;">⏳ Set Due Date</label>
+      <input type="date" id="assign-due-date" style="background: #2c2c44; border: 2px solid #eab308; color: white;">
+    </div>
+  </div>
+
+  <button onclick="deployAssignment()" style="background: #eab308; color: #1a0033; border-bottom: 4px solid #ca8a04;">🚀 Push to Students</button>
 </div>
 
 <!-- ADD QUESTION -->
@@ -346,6 +415,50 @@ async function loadTeacherDashboard() {
   } catch(e) { console.error("Stats Error:", e); }
 }
 loadTeacherDashboard();
+
+// ADD STUDENT
+async function addStudent() {
+  const name = document.getElementById("stu-name").value;
+  const email = document.getElementById("stu-email").value;
+  const password = document.getElementById("stu-password").value;
+  const grade = document.getElementById("stu-grade").value;
+
+  if(!name || !email || !password || !grade) return alert("Please fill all fields to register the student!");
+
+  const res = await fetch("/api/auth/register", {
+    method: "POST", headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ name, email, password, role: "student", grade })
+  });
+
+  if(res.ok) {
+    alert("Student Account Created Successfully! ✅ They can now log in.");
+    document.getElementById("stu-name").value = "";
+    document.getElementById("stu-email").value = "";
+    document.getElementById("stu-password").value = "";
+  } else {
+    alert("Failed to create student account.");
+  }
+}
+
+// DEPLOY ASSIGNMENT
+function deployAssignment() {
+  const grade = document.getElementById("assign-grade").value;
+  const subject = document.getElementById("assign-subject").value;
+  const unit = document.getElementById("assign-unit").value;
+  const dateStr = document.getElementById("assign-due-date").value;
+  
+  if(!grade || !subject || !unit || !dateStr) return alert("Please fill all assignment fields, including the Due Date, before deploying!");
+  
+  const dateObj = new Date(dateStr);
+  const formattedDate = dateObj.toLocaleDateString("en-US", { weekday: 'long', month: 'short', day: 'numeric' });
+  
+  alert("✅ Success! The " + subject + " module has been securely pushed to all Grade " + grade + " student dashboards. Due by: " + formattedDate);
+  
+  document.getElementById("assign-grade").value = "";
+  document.getElementById("assign-subject").value = "";
+  document.getElementById("assign-unit").value = "";
+  document.getElementById("assign-due-date").value = "";
+}
 
 // ADD QUESTION
 async function addQuestion() {

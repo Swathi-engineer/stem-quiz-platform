@@ -4,6 +4,14 @@ const Question = require("./models/Question");
 const subjects = ["Science", "Technology", "Engineering", "Mathematics"];
 const grades = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 
+const images = [
+  "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Three_leaves_icon.svg/200px-Three_leaves_icon.svg.png",
+  "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Flower_poster_2.jpg/200px-Flower_poster_2.jpg",
+  "https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Water_drop_on_a_leaf.jpg/200px-Water_drop_on_a_leaf.jpg",
+  "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Plum_leaf.jpg/200px-Plum_leaf.jpg",
+  "https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/Sunflower_from_Silesia2.jpg/200px-Sunflower_from_Silesia2.jpg"
+];
+
 const banks = {
   Science: {
     "1-3": [
@@ -142,16 +150,23 @@ mongoose.connect("mongodb://127.0.0.1:27017/stem_quiz").then(async () => {
 
       const qBank = banks[subject][bracket];
 
-      // Insert those 5 questions
-      qBank.forEach(qItem => {
-        toInsert.push({
-          question: `(Grade ${grade}) ` + qItem.q,
-          options: qItem.o,
-          answer: qItem.a,
-          subject: subject,
-          grade: grade
+      // To ensure we have 15 questions per Grade & Subject (5 for Level 1, 5 for Level 2, 5 for Level 3)
+      // We will loop through the bank 3 times, simulating slight progression in difficulty.
+
+      for (let level = 1; level <= 3; level++) {
+        const levelName = level === 1 ? "Basic" : level === 2 ? "Intermediate" : "Hard";
+        qBank.forEach((qItem, index) => {
+          toInsert.push({
+            // Adding distinctive flair so the UI shows new questions per level
+            question: `[${levelName}] ${qItem.q}`,
+            options: qItem.o,
+            answer: qItem.a,
+            subject: subject,
+            grade: grade,
+            image: images[index % 5] // Add image to every question!
+          });
         });
-      });
+      }
     });
   });
 

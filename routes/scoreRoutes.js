@@ -10,10 +10,10 @@ router.get("/", async (req, res) => {
 
 
 // SAVE SCORE
-router.post("/save", async (req, res) => {
-  const { email, score, total, subject, grade } = req.body;
+router.post("/submit", async (req, res) => {
+  const { email, score, total, subject, grade, level, lesson } = req.body;
 
-  const newScore = new Score({ email, score, total, subject, grade });
+  const newScore = new Score({ email, score, total, subject, grade, level, lesson });
   await newScore.save();
 
   res.json({ message: "Score saved" });
