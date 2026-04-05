@@ -16,7 +16,7 @@
 
     body {
       font-family: 'Outfit', sans-serif;
-      background: linear-gradient(45deg, #0f0f1a, #1a0033, #0b0726, #210d33);
+      background: linear-gradient(45deg, rgba(15, 15, 26, 0.9), rgba(26, 0, 51, 0.9), rgba(11, 7, 38, 0.9), rgba(33, 13, 51, 0.9)), url('https://www.transparenttextures.com/patterns/stardust.png'); background-size: 400% 400%, auto;
       background-size: 400% 400%;
       animation: bgPulse 15s ease infinite; 
       min-height: 100vh;
@@ -201,7 +201,7 @@
     <div class="title-header" id="header-title">Loading...</div>
     <div class="stats">
       <div class="stat-pill xp-pill">⚡ <span id="xpCount">0</span> XP</div>
-      <div class="stat-pill level-pill">⭐ Lv<span id="headerLevel">1</span></div>
+      <div class="stat-pill level-pill">⭐ Lv<span id="headerGalaxy Level">1</span></div>
     </div>
   </div>
 
@@ -224,8 +224,8 @@ const email = params.get("email") || "";
 const lesson = params.get("lesson") || "General";
 const level = parseInt(params.get("level") || 1);
 
-document.getElementById("header-title").innerText = `${subject} - ${lesson} (Level ${level})`;
-document.getElementById("headerLevel").innerText = level;
+document.getElementById("header-title").innerText = `${subject} - ${lesson} (Galaxy Level ${level})`;
+document.getElementById("headerGalaxy Level").innerText = level;
 
 // THEME ADJUSTMENTS based on grade 
 if (grade >= 1 && grade <= 3) {
@@ -269,14 +269,14 @@ async function loadQuestions() {
         ];
     }
 
-    // Partition questions by level (2 per level)
-    const itemsPerLevel = 2;
+    // Partition questions by level (5 per level)
+    const itemsPerLevel = 5;
     const startIndex = (level - 1) * itemsPerLevel;
     let sliced = allQuestions.slice(startIndex, startIndex + itemsPerLevel);
     
     // Fallback if not enough questions
     if (sliced.length === 0 && allQuestions.length > 0) {
-        sliced = allQuestions.slice(0, 2); 
+        sliced = allQuestions.slice(0, 5); 
     }
 
     state.qs = sliced;
@@ -319,7 +319,12 @@ function showQuestion() {
   const letters = ['A','B','C','D'];
   
   // Optional Visual
-  let visualHtml = `<div class="q-visual">${getScene(subject)}</div>`;
+  let visualHtml = '';
+  if (q.image) {
+    visualHtml = `<div class="q-visual"><img src="${q.image}" class="visual-img" alt="Question Image"/></div>`;
+  } else {
+    visualHtml = `<div class="q-visual">${getScene(subject)}</div>`;
+  }
   
   // Safe JS escape for HTML injection
   const escapeSingleQuotes = (str) => String(str).replace(/'/g, "\\'");
@@ -435,16 +440,23 @@ function disableOptions() {
 function showFeedback(ok, msg, sub, comboXP = 0) {
   const o = document.getElementById('feedbackOverlay');
   
-  // Create the Kahoot/Duolingo style sliding bottom panel dynamically
+  // Create a sleek floating toast notification
   o.innerHTML = `
-    <div style="position:fixed; bottom:0; left:0; width:100%; height:220px; background:${ok ? '#4ade80' : '#f87171'}; border-top-left-radius: 40px; border-top-right-radius: 40px; display:flex; flex-direction:column; justify-content:center; align-items:center; z-index:999; animation: slideUp 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards; box-shadow: 0 -10px 40px rgba(0,0,0,0.5);">
-        <div style="font-family:'Fredoka One',cursive; font-size:3rem; color:${ok ? '#064e3b' : '#450a0a'}; text-align:center;">
-             ${ok ? '🎉 Correct!' : '❌ Incorrect'}
-        </div>
-        <div style="color:${ok ? '#064e3b' : '#450a0a'}; font-weight:bold; font-size: 1.5rem; margin-top: 10px;">
-            ${ok ? msg : 'Correct Answer: ' + sub}
-        </div>
-        ${comboXP > 0 ? '<div style="margin-top: 15px; background: rgba(255,255,255,0.4); padding: 5px 20px; border-radius: 20px; color: #064e3b; font-weight: 800; font-size: 1.2rem; animation: popIn 0.3s;">🔥 DOUBLE XP COMBO TRIGGERED! (+' + comboXP + ' XP)</div>' : ''}
+    <div style="position:fixed; bottom:40px; left:0; width:100%; display:flex; justify-content:center; pointer-events:none; z-index:999;">
+      <div style="animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; background:${ok ? 'linear-gradient(135deg, #10b981, #34d399)' : 'linear-gradient(135deg, #ef4444, #f87171)'}; padding: 15px 35px; border-radius: 40px; box-shadow: ${ok ? '0 0 30px 10px rgba(52, 211, 153, 0.7), inset 0 0 15px rgba(255,255,255,0.5)' : '0 0 30px 10px rgba(248, 113, 113, 0.7), inset 0 0 15px rgba(255,255,255,0.5)'}; display:flex; flex-direction:column; align-items:center; min-width: 280px; max-width: 90%; border: 3px solid rgba(255,255,255,0.8);">
+          <div style="display:flex; align-items:center; gap: 12px; width: 100%; justify-content: center;">
+              <div style="font-size: 2.2rem; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));">${ok ? '✨' : '❌'}</div>
+              <div style="display:flex; flex-direction:column; text-align:left;">
+                  <div style="font-family:'Fredoka One',cursive; font-size:1.5rem; color:white; text-shadow: 0 2px 4px rgba(0,0,0,0.3); letter-spacing: 0.5px;">
+                       ${ok ? 'Brilliant!' : 'Incorrect'}
+                  </div>
+                  <div style="color:rgba(255,255,255,0.95); font-weight:700; font-size: 1rem; text-shadow: 0 1px 2px rgba(0,0,0,0.2);">
+                      ${ok ? msg : 'Answer: ' + sub}
+                  </div>
+              </div>
+          </div>
+          ${comboXP > 0 ? `<div style="margin-top: 12px; background: rgba(0,0,0,0.15); border: 1px solid rgba(255,255,255,0.3); padding: 4px 14px; border-radius: 20px; color: white; font-weight: 800; font-size: 0.9rem; display:flex; gap:6px; align-items:center; text-shadow: 0 1px 2px rgba(0,0,0,0.2);">🔥 STREAK BONUS (+${comboXP} XP)</div>` : ''}
+      </div>
     </div>
   `;
   o.classList.add('show');
@@ -469,7 +481,7 @@ async function showResult() {
   let unlockMsg = "";
   if (pct === 100) {
     confetti({ particleCount: 150, spread: 100, origin: { y: 0.6 }, zIndex: 1000 });
-    unlockMsg = "<div style='color:#4ECDC4; font-weight:bold; margin-top:10px; font-size: 1.2rem;'>🔓 Next Level Unlocked!</div>";
+    unlockMsg = "<div style='color:#4ECDC4; font-weight:bold; margin-top:10px; font-size: 1.2rem;'>🔓 Next Galaxy Level Unlocked!</div>";
     
     // Unlock local
     const key = `prog_${email}_${grade}_${subject}_${lesson}`;
@@ -516,7 +528,7 @@ async function showResult() {
     <div class="result-stats">
       <div class="r-stat"><div class="r-stat-val" style="color:#4ECDC4">${state.correct}</div><div class="r-stat-label">Correct</div></div>
       <div class="r-stat"><div class="r-stat-val" style="color:#FF6B6B">${state.qs.length-state.correct}</div><div class="r-stat-label">Wrong</div></div>
-      <div class="r-stat"><div class="r-stat-val" style="color:#FFE66D">${state.xp}</div><div class="r-stat-label">Total XP</div></div>
+      <div class="r-stat"><div class="r-stat-val" style="color:#FFE66D">${state.xp}</div><div class="r-stat-label">Total Energy ⚡</div></div>
     </div>
     <button class="play-again" onclick="goBack()">Back to Map 🗺️</button>
   </div>`);

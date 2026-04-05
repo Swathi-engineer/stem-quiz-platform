@@ -13,10 +13,32 @@ router.get("/", async (req, res) => {
 router.post("/submit", async (req, res) => {
   const { email, score, total, subject, grade, level, lesson } = req.body;
 
+  // Calculate past attempts
+  const pastAttempts = await Score.countDocuments({ email, subject, grade, level, lesson });
+  const attemptNum = pastAttempts + 1; // 1 means first attempt
+
   const newScore = new Score({ email, score, total, subject, grade, level, lesson });
   await newScore.save();
 
-  res.json({ message: "Score saved" });
+  // Gem points logic based on attempts and performance
+  let maxGemsForAttempt = 100;
+  if (attemptNum === 2) maxGemsForAttempt = 75;
+  else if (attemptNum === 3) maxGemsForAttempt = 50;
+  else if (attemptNum >= 4) maxGemsForAttempt = 25;
+
+  let gemsEarned = 0;
+  if (total > 0) {
+    gemsEarned = Math.round(maxGemsForAttempt * (score / total));
+  }
+
+  const User = require("../models/User");
+  const user = await User.findOne({ email });
+  if (user) {
+    user.earnedGems = (user.earnedGems || 0) + gemsEarned;
+    await user.save();
+  }
+
+  res.json({ message: "Score saved", gemsEarned, attemptNum });
 });
 
 // GET PERFORMANCE

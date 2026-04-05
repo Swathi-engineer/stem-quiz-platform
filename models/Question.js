@@ -6,7 +6,8 @@ const questionSchema = new mongoose.Schema({
   answer: String,
   subject: String,   // STEM SUBJECTS
   grade: Number,     // 1 to 12
-  addedBy: String    // Track which teacher added it
+  addedBy: String,   // Track which teacher added it
+  image: String      // Optional image URL
 });
 
 module.exports = mongoose.model("Question", questionSchema);

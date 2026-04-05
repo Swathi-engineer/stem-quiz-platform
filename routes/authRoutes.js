@@ -7,7 +7,17 @@ router.post("/register", async (req, res) => {
   try {
     const { name, email, password, role, grade } = req.body;
 
-    const user = new User({ name, email, password, role, grade });
+    let user = await User.findOne({ email });
+    if (user) {
+      if (name) user.name = name;
+      if (password) user.password = password;
+      if (role) user.role = role;
+      if (grade) user.grade = grade;
+      await user.save();
+      return res.json({ message: "User updated successfully" });
+    }
+
+    user = new User({ name, email, password, role, grade });
     await user.save();
 
     res.json({ message: "User registered successfully" });
@@ -46,6 +56,7 @@ router.get("/users", async (req, res) => {
     email: user.email,
     displayName: user.displayName || user.name || (user.email ? user.email.split('@')[0] : ""),
     avatar: user.avatar || "🧑‍🚀",
+    profileImage: user.profileImage || "",
     role: user.role || "student",
     grade: user.grade
   }));
@@ -59,19 +70,21 @@ router.get("/profile/:email", async (req, res) => {
   res.json({
     displayName: user.displayName || user.name || user.email.split('@')[0],
     avatar: user.avatar || "🧑‍🚀",
+    profileImage: user.profileImage || "",
     unlockedAvatars: user.unlockedAvatars || ["🧑‍🚀"],
     spentGems: user.spentGems || 0,
+    earnedGems: user.earnedGems || 0,
     grade: user.grade || 5
   });
 });
 
-// UPDATE PROFILE
 router.post("/profile/update", async (req, res) => {
-  const { email, displayName, avatar } = req.body;
+  const { email, displayName, avatar, profileImage } = req.body;
   const user = await User.findOne({ email });
   if (!user) return res.status(404).json({ message: "User not found" });
-  if (displayName) user.displayName = displayName;
+  if (displayName !== undefined) user.displayName = displayName;
   if (avatar) user.avatar = avatar;
+  if (profileImage !== undefined) user.profileImage = profileImage;
   await user.save();
   res.json({ message: "Profile updated" });
 });

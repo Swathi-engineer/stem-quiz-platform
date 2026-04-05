@@ -4,16 +4,37 @@ const Question = require("./models/Question");
 const subjects = ["Science", "Technology", "Engineering", "Mathematics"];
 const grades = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 
-const images = [
-  "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Three_leaves_icon.svg/200px-Three_leaves_icon.svg.png",
-  "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Flower_poster_2.jpg/200px-Flower_poster_2.jpg",
-  "https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Water_drop_on_a_leaf.jpg/200px-Water_drop_on_a_leaf.jpg",
-  "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Plum_leaf.jpg/200px-Plum_leaf.jpg",
-  "https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/Sunflower_from_Silesia2.jpg/200px-Sunflower_from_Silesia2.jpg"
+const defaultImages = [
+  "https://img.icons8.com/color/256/leaf.png",
+  "https://img.icons8.com/color/256/flower.png",
+  "https://img.icons8.com/color/256/water.png",
+  "https://img.icons8.com/color/256/rain.png",
+  "https://img.icons8.com/color/256/apple.png"
 ];
 
 const banks = {
   Science: {
+    "1": [
+      { q: "Which of these animals can fly?", o: ["Dog", "Bird", "Cat", "Fish"], a: "Bird", img: "https://img.icons8.com/color/256/bird.png" },
+      { q: "What do we use to see things?", o: ["Ears", "Nose", "Eyes", "Mouth"], a: "Eyes", img: "https://img.icons8.com/color/256/visible.png" },
+      { q: "Which of these is a fruit?", o: ["Carrot", "Potato", "Apple", "Onion"], a: "Apple", img: "https://img.icons8.com/color/256/apple.png" },
+      { q: "What falls from the sky when it is raining?", o: ["Rocks", "Water", "Sand", "Leaves"], a: "Water", img: "https://img.icons8.com/color/256/rain.png" },
+      { q: "Which animal lives in the water?", o: ["Lion", "Monkey", "Fish", "Elephant"], a: "Fish", img: "https://img.icons8.com/color/256/fish.png" }
+    ],
+    "1-intermediate": [
+      { q: "What part of the plant is in the ground?", o: ["Roots", "Leaves", "Stem", "Flower"], a: "Roots", img: "https://sl.bing.net/jIlMD8bCs9c" },
+      { q: "Which animal is a reptile?", o: ["Snake", "Dog", "Bird", "Frog"], a: "Snake", img: "https://img.icons8.com/color/256/snake.png" },
+      { q: "What do you use to measure temperature?", o: ["Thermometer", "Ruler", "Scale", "Clock"], a: "Thermometer", img: "https://img.icons8.com/color/256/thermometer.png" },
+      { q: "What happens when you freeze water?", o: ["It becomes ice", "It boils", "It disappears", "It goes away"], a: "It becomes ice", img: "https://img.icons8.com/color/256/snow.png" },
+      { q: "Which planet do we live on?", o: ["Earth", "Mars", "Venus", "Sun"], a: "Earth", img: "https://img.icons8.com/color/256/earth-planet.png" }
+    ],
+    "1-hard": [
+      { q: "Which part of the plant makes food?", o: ["Leaves", "Roots", "Stem", "Flowers"], a: "Leaves", img: "https://img.icons8.com/color/256/leaf.png" },
+      { q: "What do we call a baby dog?", o: ["Puppy", "Kitten", "Calf", "Cub"], a: "Puppy", img: "https://img.icons8.com/color/256/dog.png" },
+      { q: "Which of these dissolves in water?", o: ["Salt", "Sand", "Wood", "Plastic"], a: "Salt", img: "https://img.icons8.com/color/256/salt-shaker.png" },
+      { q: "What gives us light and heat during the day?", o: ["Moon", "Stars", "Sun", "Fire"], a: "Sun", img: "https://img.icons8.com/color/256/sun.png" },
+      { q: "Which animal changes from a caterpillar?", o: ["Butterfly", "Bird", "Dog", "Fish"], a: "Butterfly", img: "https://img.icons8.com/color/256/butterfly.png" }
+    ],
     "1-3": [
       { q: "What do plants need to grow?", o: ["Water", "Soda", "Juice", "Milk"], a: "Water" },
       { q: "Which animal says moo?", o: ["Cow", "Dog", "Cat", "Sheep"], a: "Cow" },
@@ -44,6 +65,27 @@ const banks = {
     ]
   },
   Technology: {
+    "1": [
+      { q: "What do we use to type words on a computer?", o: ["Mouse", "Keyboard", "Screen", "Speaker"], a: "Keyboard", img: "https://img.icons8.com/color/256/keyboard.png" },
+      { q: "Which of these shows the pictures on a computer?", o: ["Monitor", "Mouse", "Wire", "Printer"], a: "Monitor", img: "https://img.icons8.com/color/256/monitor.png" },
+      { q: "Which device can you hold in your hands to play games or watch videos?", o: ["Tablet", "Refrigerator", "Washing Machine", "Oven"], a: "Tablet", img: "https://img.icons8.com/color/256/ipad.png" },
+      { q: "What do we click with?", o: ["Keyboard", "Screen", "Mouse", "Printer"], a: "Mouse", img: "https://img.icons8.com/color/256/mouse.png" },
+      { q: "What machine takes pictures?", o: ["Camera", "Keyboard", "Monitor", "Mouse"], a: "Camera", img: "https://img.icons8.com/color/256/camera.png" }
+    ],
+    "1-intermediate": [
+      { q: "What does a printer do?", o: ["Prints paper", "Plays music", "Shows video", "Cooks food"], a: "Prints paper", img: "https://img.icons8.com/color/256/print.png" },
+      { q: "Which is used to connect to the Internet?", o: ["Wi-Fi", "Water pipe", "Gas line", "Flashlight"], a: "Wi-Fi", img: "https://img.icons8.com/color/256/wifi.png" },
+      { q: "What is a robot?", o: ["A machine", "A plant", "An animal", "A fruit"], a: "A machine", img: "https://img.icons8.com/color/256/bot.png" },
+      { q: "What do you wear on your ears to listen to music?", o: ["Headphones", "Glasses", "Hat", "Shoes"], a: "Headphones", img: "https://img.icons8.com/color/256/headphones.png" },
+      { q: "What do we use to make a phone call?", o: ["Smartphone", "Toaster", "Microwave", "Television"], a: "Smartphone", img: "https://img.icons8.com/color/256/smartphone.png" }
+    ],
+    "1-hard": [
+      { q: "What part of the computer stores your files?", o: ["Hard Drive", "Monitor", "Keyboard", "Mouse"], a: "Hard Drive", img: "https://img.icons8.com/color/256/hdd.png" },
+      { q: "What connects your computer to the internet without wires?", o: ["Wi-Fi", "USB", "Mouse", "Screen"], a: "Wi-Fi", img: "https://img.icons8.com/color/256/wifi.png" },
+      { q: "What device do we use to record our voice?", o: ["Microphone", "Speaker", "Printer", "Monitor"], a: "Microphone", img: "https://img.icons8.com/color/256/microphone.png" },
+      { q: "What is an app on a tablet?", o: ["A computer program", "A type of fruit", "A computer mouse", "A wire"], a: "A computer program", img: "https://img.icons8.com/color/256/mac-client.png" },
+      { q: "Which button deletes letters when you type?", o: ["Backspace", "Enter", "Spacebar", "Shift"], a: "Backspace", img: "https://img.icons8.com/color/256/clear-symbol.png" }
+    ],
     "1-3": [
       { q: "Which of these is used to type on a computer?", o: ["Keyboard", "Mouse", "Monitor", "Printer"], a: "Keyboard" },
       { q: "Which of these points and clicks?", o: ["Mouse", "Screen", "CPU", "Speakers"], a: "Mouse" },
@@ -74,6 +116,27 @@ const banks = {
     ]
   },
   Engineering: {
+    "1": [
+      { q: "What helps a car roll on the ground?", o: ["Wings", "Wheels", "Windows", "Doors"], a: "Wheels", img: "https://img.icons8.com/color/256/steering-wheel.png" },
+      { q: "What do we build across a river so cars can drive over?", o: ["House", "Bridge", "Tower", "Wall"], a: "Bridge", img: "https://img.icons8.com/color/256/bridge.png" },
+      { q: "Which tool do we use to hit a nail?", o: ["Screwdriver", "Hammer", "Wrench", "Saw"], a: "Hammer", img: "https://img.icons8.com/color/256/hammer.png" },
+      { q: "What shape are most blocks used to build simple walls?", o: ["Circle", "Triangle", "Rectangle", "Star"], a: "Rectangle", img: "https://img.icons8.com/color/256/brick-wall.png" },
+      { q: "What do we wear on our heads for safety when building?", o: ["Hat", "Hard Hat", "Cap", "Beanie"], a: "Hard Hat", img: "https://img.icons8.com/color/256/construction-worker.png" }
+    ],
+    "1-intermediate": [
+      { q: "What do we use to build a strong wall?", o: ["Bricks", "Paper", "Leaves", "Feathers"], a: "Bricks", img: "https://img.icons8.com/color/256/brick-wall.png" },
+      { q: "What machine moves big amounts of dirt?", o: ["Excavator", "Bicycle", "Boat", "Airplane"], a: "Excavator", img: "https://img.icons8.com/color/256/bulldozer.png" },
+      { q: "What do we use to cut wood?", o: ["Saw", "Hammer", "Screwdriver", "Wrench"], a: "Saw", img: "https://img.icons8.com/color/256/saw.png" },
+      { q: "What simple machine has wheels and a handle?", o: ["Wagon", "Book", "Pencil", "Apple"], a: "Wagon", img: "https://img.icons8.com/color/256/wheelbarrow.png" },
+      { q: "What part of a house keeps the rain out?", o: ["Roof", "Floor", "Window", "Door"], a: "Roof", img: "https://img.icons8.com/color/256/home.png" }
+    ],
+    "1-hard": [
+      { q: "Which tool is used to turn a screw?", o: ["Screwdriver", "Hammer", "Saw", "Ruler"], a: "Screwdriver", img: "https://img.icons8.com/color/256/screwdriver.png" },
+      { q: "What simple machine uses a rope and a wheel?", o: ["Pulley", "Lever", "Wedge", "Screw"], a: "Pulley", img: "https://img.icons8.com/color/256/pulley.png" },
+      { q: "What is the strong metal frame of a big building?", o: ["Steel", "Wood", "Plastic", "Glass"], a: "Steel", img: "https://img.icons8.com/color/256/crane.png" },
+      { q: "What heavy object keeps a boat from floating away?", o: ["Anchor", "Sail", "Motor", "Wheel"], a: "Anchor", img: "https://img.icons8.com/color/256/anchor.png" },
+      { q: "Which holds pieces of wood together by twisting it in?", o: ["Screw", "Nail", "Tape", "String"], a: "Screw", img: "https://img.icons8.com/color/256/screw.png" }
+    ],
     "1-3": [
       { q: "What is a simple machine that rolls?", o: ["Wheel", "Lever", "Pulley", "Wedge"], a: "Wheel" },
       { q: "What holds a house up?", o: ["Foundation", "Roof", "Windows", "Doors"], a: "Foundation" },
@@ -104,6 +167,27 @@ const banks = {
     ]
   },
   Mathematics: {
+    "1": [
+      { q: "If you have 1 apple and get 1 more, how many do you have?", o: ["1", "2", "3", "4"], a: "2", img: "https://img.icons8.com/color/256/apple.png" },
+      { q: "Which number comes after 5?", o: ["4", "5", "6", "7"], a: "6", img: "https://img.icons8.com/color/256/6.png" },
+      { q: "What shape is round like a ball?", o: ["Square", "Triangle", "Circle", "Rectangle"], a: "Circle", img: "https://img.icons8.com/color/256/basketball.png" },
+      { q: "Which object is the longest?", o: ["Pencil", "Eraser", "Crayon", "Ruler"], a: "Ruler", img: "https://img.icons8.com/color/256/ruler.png" },
+      { q: "How many fingers are on one hand?", o: ["3", "4", "5", "6"], a: "5", img: "https://img.icons8.com/color/256/hand.png" }
+    ],
+    "1-intermediate": [
+      { q: "What is 5 + 3?", o: ["8", "7", "6", "9"], a: "8", img: "https://img.icons8.com/color/256/8.png" },
+      { q: "Which shape has exactly three sides?", o: ["Triangle", "Square", "Circle", "Rectangle"], a: "Triangle", img: "https://img.icons8.com/color/256/geometry.png" },
+      { q: "If I have 10 candies and eat 2, how many are left?", o: ["8", "9", "10", "12"], a: "8", img: "https://img.icons8.com/color/256/sweets.png" },
+      { q: "What is the next number after 19?", o: ["20", "18", "21", "10"], a: "20", img: "https://img.icons8.com/color/256/20.png" },
+      { q: "Which is used to buy things?", o: ["Coins", "Leaves", "Stones", "Sand"], a: "Coins", img: "https://img.icons8.com/color/256/coins.png" }
+    ],
+    "1-hard": [
+      { q: "What is 10 + 5?", o: ["15", "10", "12", "5"], a: "15", img: "https://img.icons8.com/color/256/plus-math.png" },
+      { q: "If you have 20 pencils and lose 5, how many are left?", o: ["15", "10", "25", "12"], a: "15", img: "https://img.icons8.com/color/256/pencil.png" },
+      { q: "Which number is the largest?", o: ["99", "89", "100", "90"], a: "100", img: "https://img.icons8.com/color/256/100.png" },
+      { q: "What shape has 6 sides?", o: ["Hexagon", "Square", "Triangle", "Circle"], a: "Hexagon", img: "https://img.icons8.com/color/256/hexagon.png" },
+      { q: "How many pennies make one dime?", o: ["10", "5", "1", "20"], a: "10", img: "https://img.icons8.com/color/256/us-dollar-circled.png" }
+    ],
     "1-3": [
       { q: "What is 2 + 2?", o: ["4", "3", "5", "6"], a: "4" },
       { q: "What is 10 - 5?", o: ["5", "4", "10", "0"], a: "5" },
@@ -143,27 +227,34 @@ mongoose.connect("mongodb://127.0.0.1:27017/stem_quiz").then(async () => {
   subjects.forEach(subject => {
     grades.forEach(grade => {
       let bracket = "";
-      if (grade >= 1 && grade <= 3) bracket = "1-3";
+      if (grade === 1) bracket = "1";
+      else if (grade >= 1 && grade <= 3) bracket = "1-3";
       else if (grade >= 4 && grade <= 6) bracket = "4-6";
       else if (grade >= 7 && grade <= 9) bracket = "7-9";
       else bracket = "10-12";
 
-      const qBank = banks[subject][bracket];
+      const defaultBank = banks[subject][bracket] || banks[subject]["1-3"]; // Fallback if bracket missing
 
       // To ensure we have 15 questions per Grade & Subject (5 for Level 1, 5 for Level 2, 5 for Level 3)
-      // We will loop through the bank 3 times, simulating slight progression in difficulty.
-
       for (let level = 1; level <= 3; level++) {
         const levelName = level === 1 ? "Basic" : level === 2 ? "Intermediate" : "Hard";
+        
+        let specificBracket = "";
+        if (level === 1) specificBracket = bracket + "-basic";
+        else if (level === 2) specificBracket = bracket + "-intermediate";
+        else if (level === 3) specificBracket = bracket + "-hard";
+        
+        let qBank = banks[subject][specificBracket] ? banks[subject][specificBracket] : defaultBank;
+
         qBank.forEach((qItem, index) => {
+          let assignedImage = qItem.img ? qItem.img : defaultImages[index % 5];
           toInsert.push({
-            // Adding distinctive flair so the UI shows new questions per level
             question: `[${levelName}] ${qItem.q}`,
             options: qItem.o,
             answer: qItem.a,
             subject: subject,
             grade: grade,
-            image: images[index % 5] // Add image to every question!
+            image: assignedImage
           });
         });
       }

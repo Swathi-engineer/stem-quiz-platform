@@ -9,11 +9,14 @@
 <style>
 body {
   margin: 0;
-  font-family: 'Outfit', sans-serif; /* Modern typography */
+  font-family: 'Outfit', sans-serif;
   background: linear-gradient(45deg, #0f0f1a, #1a0033, #0b0726, #210d33);
   background-size: 400% 400%;
   animation: bgPulse 15s ease infinite; 
   color: white;
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
 }
 
 @keyframes bgPulse {
@@ -72,22 +75,22 @@ body {
 }
 
 .card {
-  background: rgba(20, 20, 32, 0.65);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background: rgba(30, 20, 50, 0.7);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
   padding: 40px;
-  border-radius: 20px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 30px;
+  border: 2px solid rgba(168, 85, 247, 0.4);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5), inset 0 0 20px rgba(168, 85, 247, 0.1);
   margin: auto;
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
   width: 100%;
-  transition: all 0.3s ease;
+  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 15px 40px rgba(0,0,0,0.6);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  transform: translateY(-5px);
+  box-shadow: 0 20px 50px rgba(0,0,0,0.6), inset 0 0 30px rgba(168, 85, 247, 0.2);
+  border: 2px solid rgba(168, 85, 247, 0.8);
 }
 
 /* MASCOT CHARACTER */
@@ -138,12 +141,16 @@ body {
 .stats-row {
   display: flex;
   justify-content: space-around;
-  background: #2c2c44;
-  border-radius: 16px;
-  padding: 15px;
+  background: linear-gradient(145deg, #2c2c44, #1a1a2e);
+  border-radius: 20px;
+  padding: 20px 15px;
   margin-bottom: 25px;
-  border: 2px solid #3d3d5c;
-  box-shadow: 0 4px 0 #1e1e2f;
+  border: 3px solid #58cc02;
+  box-shadow: 0 8px 0 #3d8f01, 0 15px 20px rgba(0,0,0,0.4);
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.stats-row:hover {
+  transform: scale(1.02) translateY(-5px);
 }
 
 .stat-box {
@@ -213,26 +220,32 @@ select {
 
 button {
   width: 100%;
-  padding: 15px;
+  padding: 16px;
   margin-top: 15px;
-  border-radius: 12px;
+  border-radius: 18px;
   border: none;
-  border-bottom: 4px solid #58a700;
+  border-bottom: 5px solid #3d8f01;
   background: #58cc02;
   color: white;
-  font-weight: bold;
-  font-size: 16px;
+  font-weight: 900;
+  font-size: 18px;
   cursor: pointer;
-  transition: transform 0.1s, border-bottom 0.1s;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-shadow: 0 8px 15px rgba(88, 204, 2, 0.3);
 }
 
 button:hover {
-  filter: brightness(1.1);
+  transform: translateY(-4px);
+  filter: brightness(1.15);
+  box-shadow: 0 12px 20px rgba(88, 204, 2, 0.5);
 }
 
 button:active {
-  transform: translateY(4px);
+  transform: translateY(5px);
   border-bottom: 0px solid #58cc02;
+  box-shadow: 0 0px 0px rgba(88, 204, 2, 0.3);
 }
 
 /* DUOLINGO QUESTS */
@@ -350,18 +363,19 @@ button:active {
   gap: 20px;
 }
 .sub-btn {
-  border-radius: 12px;
-  padding: 15px 10px;
+  border-radius: 20px;
+  padding: 20px 10px;
   text-align: center;
-  font-weight: bold;
-  font-size: 1.1em;
+  font-weight: 900;
+  font-size: 1.2em;
   cursor: pointer;
-  transition: 0.2s;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
   color: white;
-  border-bottom: 4px solid rgba(0,0,0,0.2);
+  border-bottom: 6px solid rgba(0,0,0,0.3);
+  box-shadow: 0 10px 15px rgba(0,0,0,0.2);
 }
-.sub-btn:hover { transform: scale(1.05); filter: brightness(1.1); }
-.sub-btn.selected { transform: scale(0.95); border-bottom: 0; margin-top: 4px; border: 3px solid white; box-shadow: 0 0 15px white;}
+.sub-btn:hover { transform: scale(1.08) translateY(-5px); filter: brightness(1.2); box-shadow: 0 15px 25px rgba(0,0,0,0.4); }
+.sub-btn.selected { transform: scale(0.95); border-bottom: 0; margin-top: 6px; border: 4px solid white; box-shadow: 0 0 20px white;}
 .k-red { background: #e21b3c; }
 .k-blue { background: #1368ce; }
 .k-yellow { background: #d89e00; }
@@ -444,7 +458,10 @@ button:active {
     <a onclick="showSection('courses')">Courses</a>
     <a onclick="showSection('progress')">My Progress</a>
     <a onclick="showSection('leadership')">Leadership</a>
-    <a onclick="openProfileModal()">Profile</a>
+    <a onclick="openProfileModal()" id="nav-profile-name" style="display:flex; align-items:center; gap:8px;">
+        <img id="nav-profile-img" style="display:none; width:30px; height:30px; border-radius:50%; object-fit:cover; border:2px solid #58cc02;">
+        Profile
+    </a>
     <a onclick="showSection('shop')">Avatar Shop</a>
     <a onclick="logout()">Logout</a>
   </div>
@@ -455,7 +472,8 @@ button:active {
 <div id="profile-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.8); z-index: 1000; justify-content: center; align-items: center;">
   <div class="card" style="max-width: 400px; text-align: center;">
     <h3>Edit Profile</h3>
-    <input type="text" id="profile-name" placeholder="Enter Display Name" style="width: 80%; padding: 10px; margin: 15px 0; border-radius: 8px; border: 1px solid #3d3d5c; background: #1e1e2f; color: white; font-size: 1.1em;" maxlength="15">
+    <input type="text" id="profile-name" placeholder="Enter Display Name" style="width: 80%; padding: 10px; margin: 15px 0 5px 0; border-radius: 8px; border: 1px solid #3d3d5c; background: #1e1e2f; color: white; font-size: 1.1em;" maxlength="15">
+    <input type="text" id="profile-image-url" placeholder="Paste Image URL (Optional)" style="width: 80%; padding: 10px; margin: 5px 0 15px 0; border-radius: 8px; border: 1px solid #3d3d5c; background: #1e1e2f; color: white; font-size: 1.1em;">
     <br>
     <button class="k-btn" onclick="saveProfile()" style="padding: 10px 20px; font-size: 1.1em; margin-bottom: 10px;">Save Settings</button>
     <br>
@@ -751,7 +769,7 @@ function playSound(type) {
 const params = new URLSearchParams(window.location.search);
 const email = params.get("email");
 
-let userProfile = { displayName: "", avatar: "🧑‍🚀", unlockedAvatars: ["🧑‍🚀"], spentGems: 0 };
+let userProfile = { displayName: "", avatar: "🧑‍🚀", profileImage: "", unlockedAvatars: ["🧑‍🚀"], spentGems: 0 };
 
 async function fetchProfile() {
   if (!email) return;
@@ -764,6 +782,15 @@ async function fetchProfile() {
         if(document.getElementById("grade-display")) document.getElementById("grade-display").innerText = g;
         if(document.getElementById("mock-grade-1")) document.getElementById("mock-grade-1").innerText = `Grade ${g}`;
         if(document.getElementById("mock-grade-2")) document.getElementById("mock-grade-2").innerText = `Grade ${g}`;
+        
+        const navImg = document.getElementById("nav-profile-img");
+        if(navImg && userProfile.profileImage) {
+            navImg.style.display = "block";
+            navImg.src = userProfile.profileImage;
+        } else if(navImg) {
+            navImg.style.display = "none";
+        }
+        
         if(typeof updateThemeForGrade === 'function') updateThemeForGrade(g);
     }
   } catch(e){}
@@ -771,14 +798,26 @@ async function fetchProfile() {
 
 async function saveProfile() {
   const nameInput = document.getElementById("profile-name").value;
+  const imageInput = document.getElementById("profile-image-url").value;
+
   if (!nameInput) return alert("Please enter a name!");
   
   const res = await fetch("/api/auth/profile/update", {
      method: "POST", headers: { "Content-Type": "application/json" },
-     body: JSON.stringify({ email: email, displayName: nameInput })
+     body: JSON.stringify({ email: email, displayName: nameInput, profileImage: imageInput })
   });
   if(res.ok) {
      userProfile.displayName = nameInput;
+     userProfile.profileImage = imageInput;
+     
+     const navImg = document.getElementById("nav-profile-img");
+     if(navImg && imageInput) {
+         navImg.style.display = "block";
+         navImg.src = imageInput;
+     } else if(navImg) {
+         navImg.style.display = "none";
+     }
+     
      alert("Profile saved! Name will appear on Leaderboard.");
      closeProfileModal();
      loadPerformance();
@@ -787,6 +826,7 @@ async function saveProfile() {
 
 function openProfileModal() {
   document.getElementById("profile-name").value = userProfile.displayName || email.split('@')[0];
+  document.getElementById("profile-image-url").value = userProfile.profileImage || "";
   document.getElementById("profile-modal").style.display = "flex";
 }
 function closeProfileModal() { document.getElementById("profile-modal").style.display = "none"; }
@@ -821,8 +861,10 @@ async function loadPerformance() {
 
   // GAMIFIED STATS UPDATE
   const streakDays = Math.floor(Math.random() * 5) + 2; // Mock streak
-  currentGems = (totalXP * 3 + 120) - (userProfile.spentGems || 0);
-  
+  currentGems = userProfile.earnedGems !== undefined 
+      ? userProfile.earnedGems - (userProfile.spentGems || 0) 
+      : (totalXP * 3 + 120) - (userProfile.spentGems || 0);
+
   if(document.getElementById("dash-xp")) document.getElementById("dash-xp").innerText = totalXP;
   if(document.getElementById("dash-streak")) document.getElementById("dash-streak").innerText = streakDays;
   if(document.getElementById("nav-streak")) document.getElementById("nav-streak").innerText = streakDays;
@@ -915,7 +957,12 @@ async function loadPerformance() {
   } catch(e) {}
   
   const userDbMap = {};
-  allUsers.forEach(u => userDbMap[u.email] = u);
+  allUsers.forEach(u => {
+    userDbMap[u.email] = u;
+    if (u.role === "student" && userXpMap[u.email] === undefined) {
+      userXpMap[u.email] = 0;
+    }
+  });
 
   const leaderboard = Object.keys(userXpMap).map(e => {
     const dbU = userDbMap[e] || {};
@@ -923,6 +970,7 @@ async function loadPerformance() {
       email: e,
       name: dbU.displayName || e.split('@')[0],
       avatar: dbU.avatar || "🧑‍🚀",
+      profileImage: dbU.profileImage || "",
       xp: userXpMap[e]
     };
   }).sort((a, b) => b.xp - a.xp);
@@ -956,10 +1004,11 @@ async function loadPerformance() {
       const rankNum = i + 1;
       const isMe = (p.email === email);
       const crown = rankNum === 1 ? '<div class="podium-crown">👑</div>' : '';
+      const avatarHtml = p.profileImage ? `<img src="${p.profileImage}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">` : p.avatar;
       podiumEl.innerHTML += `
         <div class="podium-spot podium-${rankNum}">
           ${crown}
-          <div class="podium-avatar">${p.avatar}</div>
+          <div class="podium-avatar" style="padding:0; overflow:hidden;">${avatarHtml}</div>
           <div class="podium-name">${isMe ? 'You' : p.name}</div>
           <div class="podium-xp">${p.xp} XP</div>
           <div class="podium-step">${rankNum}</div>
@@ -974,10 +1023,11 @@ async function loadPerformance() {
     for (let i = 3; i < leaderboard.length; i++) {
       const p = leaderboard[i];
       const isMe = (p.email === email);
+      const avatarHtml = p.profileImage ? `<img src="${p.profileImage}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">` : p.avatar;
       listEl.innerHTML += `
         <div class="lb-row ${isMe ? 'current-user' : ''}">
           <div class="lb-rank">${i + 1}</div>
-          <div class="lb-avatar">${p.avatar}</div>
+          <div class="lb-avatar" style="padding:0; overflow:hidden;">${avatarHtml}</div>
           <div class="lb-name">${isMe ? 'You (Me)' : p.name}</div>
           <div class="lb-xp">${p.xp} XP</div>
         </div>
@@ -1077,15 +1127,27 @@ async function buyAvatar(emoji, cost) {
 // ====== DYNAMIC THEME BASED ON GRADE ======
 function updateThemeForGrade(grade) {
   const mascot = document.querySelector(".mascot");
+  if (!mascot) return;
   
+  if (userProfile && userProfile.profileImage) {
+      mascot.innerHTML = `<img src="${userProfile.profileImage}" style="width:100px; height:100px; border-radius:50%; object-fit:cover; border:3px solid #58cc02; display:block;">`;
+      return;
+  }
+  
+  // If user has unlocked avatars or explicitly set an avatar, show that exact unlocked avatar!
+  if (userProfile && userProfile.avatar) {
+     if (userProfile.unlockedAvatars && userProfile.unlockedAvatars.length > 1 || userProfile.avatar !== "🧑‍🚀") {
+         mascot.innerText = userProfile.avatar;
+         return; // Skip default grade theme
+     }
+  }
+
+  // Fallback to Grade theme
   if (grade >= 1 && grade <= 5) {
-    // 🟢 The Explorers (Grades 1-5): Cute
     if(!mascot.innerText.includes("🎩")) mascot.innerText = "🦄";
   } else if (grade >= 6 && grade <= 8) {
-    // 🔵 The Adventurers (Grades 6-8): Standard
     if(!mascot.innerText.includes("🎩")) mascot.innerText = "🦉";
   } else if (grade >= 9) {
-    // 🟣 The Scholars (Grades 9-12): Sci-fi
     if(!mascot.innerText.includes("🎩")) mascot.innerText = "🤖";
   }
 }
