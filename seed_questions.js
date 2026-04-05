@@ -5,11 +5,11 @@ const subjects = ["Science", "Technology", "Engineering", "Mathematics"];
 const grades = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 
 const images = [
-  "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Three_leaves_icon.svg/200px-Three_leaves_icon.svg.png",
-  "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Flower_poster_2.jpg/200px-Flower_poster_2.jpg",
-  "https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Water_drop_on_a_leaf.jpg/200px-Water_drop_on_a_leaf.jpg",
-  "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Plum_leaf.jpg/200px-Plum_leaf.jpg",
-  "https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/Sunflower_from_Silesia2.jpg/200px-Sunflower_from_Silesia2.jpg"
+  "/assets/images/Three_leaves_icon.png",
+  "/assets/images/Flower_poster.jpg",
+  "/assets/images/Water_drop.jpg",
+  "/assets/images/Plum_leaf.jpg",
+  "/assets/images/Sunflower.jpg"
 ];
 
 const banks = {

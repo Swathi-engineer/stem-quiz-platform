@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta charset="UTF-8">
 <title>Student Dashboard</title>
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+<link href="/assets/css/fonts.css" rel="stylesheet">
+<script src="/assets/js/confetti.browser.min.js"></script>
 
 <style>
 body {
@@ -54,6 +55,25 @@ body {
 
 .navbar a:hover {
   color: white;
+}
+
+/* Responsive Sidebar */
+.hamburger { display: none; font-size: 28px; background: none; border: none; color: white; cursor: pointer; }
+.close-sidebar { display: none; font-size: 28px; background: none; border: none; color: white; cursor: pointer; position: absolute; top: 15px; right: 20px; }
+.sidebar-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.5); z-index: 900; display: none; }
+
+@media (max-width: 768px) {
+  .hamburger { display: block; }
+  .navbar-nav { 
+    position: fixed; top: 0; right: -280px; width: 280px; height: 100vh;
+    background: rgba(20, 0, 36, 0.95); backdrop-filter: blur(20px);
+    flex-direction: column; align-items: flex-start; justify-content: flex-start;
+    padding-top: 60px; transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1); z-index: 1000;
+  }
+  .navbar-nav.active-sidebar { right: 0; box-shadow: -10px 0 30px rgba(0,0,0,0.6); }
+  .navbar a { margin: 15px 30px; font-size: 1.2em; display: block; }
+  .close-sidebar { display: block; border-bottom: none!important; }
+  .sidebar-overlay.active-sidebar { display: block; }
 }
 
 .navbar-stats {
@@ -367,6 +387,23 @@ button:active {
 .k-yellow { background: #d89e00; }
 .k-green { background: #26890c; }
 
+@media (max-width: 600px) {
+  .subject-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 10px;
+  }
+  .stats-row {
+    flex-wrap: wrap;
+  }
+  .stat-box {
+    width: 45%;
+    margin-bottom: 10px;
+  }
+  #unit-levels {
+    grid-template-columns: repeat(1, 1fr) !important;
+  }
+}
+
 .pulse-button {
   animation: pulse 2s infinite;
 }
@@ -437,15 +474,19 @@ button:active {
 <div class="navbar">
   <div style="font-size: 1.5em; font-weight: bold; color: #58cc02; letter-spacing: 1px;">🦉 STEMingo</div>
 
-  <div class="navbar-nav">
-    <div class="navbar-stats">
+  <button class="hamburger" onclick="toggleSidebar()">☰</button>
+  <div class="sidebar-overlay" id="sidebar-overlay" onclick="toggleSidebar()"></div>
+
+  <div class="navbar-nav" id="sidebar-nav">
+    <button class="close-sidebar" onclick="toggleSidebar()">✕</button>
+    <div class="navbar-stats" style="margin: 15px 30px; margin-bottom: 0px;" id="mob-stats">
       <div class="streak" title="Gems">💎 <span class="dash-gems">0</span></div>
     </div>
-    <a onclick="showSection('courses')">Courses</a>
-    <a onclick="showSection('progress')">My Progress</a>
-    <a onclick="showSection('leadership')">Leadership</a>
-    <a onclick="openProfileModal()">Profile</a>
-    <a onclick="showSection('shop')">Avatar Shop</a>
+    <a onclick="showSection('courses'); toggleSidebar()">Courses</a>
+    <a onclick="showSection('progress'); toggleSidebar()">My Progress</a>
+    <a onclick="showSection('leadership'); toggleSidebar()">Leadership</a>
+    <a onclick="openProfileModal(); toggleSidebar()">Profile</a>
+    <a onclick="showSection('shop'); toggleSidebar()">Avatar Shop</a>
     <a onclick="logout()">Logout</a>
   </div>
 </div>
@@ -644,6 +685,11 @@ button:active {
 </div>
 
 <script>
+// SIDEBAR LOGIC
+function toggleSidebar() {
+  document.getElementById('sidebar-nav').classList.toggle('active-sidebar');
+  document.getElementById('sidebar-overlay').classList.toggle('active-sidebar');
+}
 
 // SWITCH SECTIONS
 function showSection(sectionId) {
@@ -735,13 +781,13 @@ function setSubject(sub, el) {
 function playSound(type) {
   try {
     if (type === 'click') {
-      let a = new Audio('https://www.myinstants.com/media/sounds/pop_drip.mp3');
+      let a = new Audio('/assets/audio/pop_drip.mp3');
       a.volume = 0.5; a.play();
     } else if (type === 'start') {
-      let a = new Audio('https://www.myinstants.com/media/sounds/kahoot-lobby-music.mp3');
+      let a = new Audio('/assets/audio/kahoot-lobby-music.mp3');
       a.volume = 0.5; a.play();
     } else if (type === 'error') {
-      let a = new Audio('https://www.myinstants.com/media/sounds/wrong-answer.mp3');
+      let a = new Audio('/assets/audio/wrong-answer.mp3');
       a.volume = 0.5; a.play();
     }
   } catch(e){}

@@ -8,7 +8,7 @@ const questionRoutes = require("./routes/questionRoutes");
 const scoreRoutes = require("./routes/scoreRoutes");
 
 const app = express();
-const PORT = 8081;
+const PORT = 3000;
 
 // Middleware
 app.use(cors());
@@ -32,6 +32,18 @@ mongoose.connect("mongodb://127.0.0.1:27017/stem_quiz")
 .catch(err => console.log("❌ DB Error:", err));
 
 // Server
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
+  const os = require('os');
+  const interfaces = os.networkInterfaces();
+  let localIP = 'Unknown IP';
+  for (const name of Object.keys(interfaces)) {
+    for (const iface of interfaces[name]) {
+      if (iface.family === 'IPv4' && !iface.internal) {
+        localIP = iface.address;
+      }
+    }
+  }
+  
   console.log(`🔥 Server running on http://localhost:${PORT}`);
+  console.log(`🌍 Network Access: Tell students to join at -> http://${localIP}:${PORT}`);
 });
