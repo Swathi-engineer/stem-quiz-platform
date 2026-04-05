@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta charset="UTF-8">
   <title>Quiz</title>
-  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <script src="/assets/js/confetti.browser.min.js"></script>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&family=Fredoka+One&display=swap');
+    @import url("/assets/css/fonts.css");
 
     :root {
       --c1: #FF6B6B; --c2: #FFE66D; --c3: #4ECDC4; --c4: #A855F7;
@@ -241,8 +242,8 @@ if (grade >= 1 && grade <= 3) {
 }
 
 // ── AUDIO ───────────────────────────────────────────────────────────────────
-const correctSound = new Audio('https://www.myinstants.com/media/sounds/correct-ding.mp3');
-const wrongSound = new Audio('https://www.myinstants.com/media/sounds/wrong-buzzer.mp3');
+const correctSound = new Audio('/assets/audio/correct-ding.mp3');
+const wrongSound = new Audio('/assets/audio/wrong-buzzer.mp3');
 
 // ── STATE ───────────────────────────────────────────────────────────────────
 let state = { qs:[], qi:0, correct:0, xp:0, timeLeft:20, streak: 0 };
@@ -263,9 +264,9 @@ async function loadQuestions() {
     // Mock visual questions for young students
     if (grade >= 1 && grade <= 3 && subject === 'Science' && lesson === 'Plants') {
         allQuestions = [
-          { question: "How many leaves do you see?", options: ["2", "3", "4", "5"], answer: "3", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Three_leaves_icon.svg/200px-Three_leaves_icon.svg.png" },
-          { question: "Which part of the plant is this?", options: ["Root", "Stem", "Leaf", "Flower"], answer: "Flower", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Flower_poster_2.jpg/200px-Flower_poster_2.jpg" },
-          { question: "What does this plant need to grow?", options: ["Water", "Soda", "Candy", "Rocks"], answer: "Water", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Water_drop_on_a_leaf.jpg/200px-Water_drop_on_a_leaf.jpg" }
+          { question: "How many leaves do you see?", options: ["2", "3", "4", "5"], answer: "3", image: "/assets/images/Three_leaves_icon.png" },
+          { question: "Which part of the plant is this?", options: ["Root", "Stem", "Leaf", "Flower"], answer: "Flower", image: "/assets/images/Flower_poster.jpg" },
+          { question: "What does this plant need to grow?", options: ["Water", "Soda", "Candy", "Rocks"], answer: "Water", image: "/assets/images/Water_drop.jpg" }
         ];
     }
 

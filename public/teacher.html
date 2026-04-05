@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta charset="UTF-8">
 <title>Teacher Dashboard</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&display=swap" rel="stylesheet">
+<link href="/assets/css/fonts.css" rel="stylesheet">
 <style>
 * {
   box-sizing: border-box;
@@ -63,6 +64,25 @@ body {
 
 .navbar-nav a:hover, .navbar-nav a.active-link {
   color: white;
+}
+
+/* Responsive Sidebar */
+.hamburger { display: none; font-size: 28px; background: none; border: none; color: white; cursor: pointer; }
+.close-sidebar { display: none; font-size: 28px; background: none; border: none; color: white; cursor: pointer; position: absolute; top: 15px; right: 20px; }
+.sidebar-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.5); z-index: 900; display: none; }
+
+@media (max-width: 768px) {
+  .hamburger { display: block; }
+  .navbar-nav { 
+    position: fixed; top: 0; right: -280px; width: 280px; height: 100vh;
+    background: rgba(20, 0, 36, 0.95); backdrop-filter: blur(20px);
+    flex-direction: column; align-items: flex-start; justify-content: flex-start;
+    padding-top: 60px; transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1); z-index: 1000;
+  }
+  .navbar-nav.active-sidebar { right: 0; box-shadow: -10px 0 30px rgba(0,0,0,0.6); }
+  .navbar-nav a { margin: 15px 30px; font-size: 1.1em; display: block; }
+  .close-sidebar { display: block; border-bottom: none!important; }
+  .sidebar-overlay.active-sidebar { display: block; }
 }
 
 .container {
@@ -208,12 +228,17 @@ button:active { transform: translateY(4px); border-bottom: 0px solid #9333ea; }
 <!-- NAVBAR -->
 <div class="navbar">
   <div class="brand">👩‍🏫 Teacher Panel</div>
-  <div class="navbar-nav">
-    <a onclick="showSection('add-student')" class="nav-link" id="nav-add-student">Add Student</a>
-    <a onclick="showSection('assign')" class="nav-link" id="nav-assign">Assign Work</a>
-    <a onclick="showSection('add')" class="nav-link active-link" id="nav-add">Add Question</a>
-    <a onclick="showSection('view')" class="nav-link" id="nav-view">View Questions</a>
-    <a onclick="showSection('performance')" class="nav-link" id="nav-perf">Student Progress</a>
+
+  <button class="hamburger" onclick="toggleSidebar()">☰</button>
+  <div class="sidebar-overlay" id="sidebar-overlay" onclick="toggleSidebar()"></div>
+
+  <div class="navbar-nav" id="sidebar-nav">
+    <button class="close-sidebar" onclick="toggleSidebar()">✕</button>
+    <a onclick="showSection('add-student'); toggleSidebar()" class="nav-link" id="nav-add-student">Add Student</a>
+    <a onclick="showSection('assign'); toggleSidebar()" class="nav-link" id="nav-assign">Assign Work</a>
+    <a onclick="showSection('add'); toggleSidebar()" class="nav-link active-link" id="nav-add">Add Question</a>
+    <a onclick="showSection('view'); toggleSidebar()" class="nav-link" id="nav-view">View Questions</a>
+    <a onclick="showSection('performance'); toggleSidebar()" class="nav-link" id="nav-perf">Student Progress</a>
     <a onclick="logout()">Logout</a>
   </div>
 </div>
@@ -370,6 +395,12 @@ button:active { transform: translateY(4px); border-bottom: 0px solid #9333ea; }
 </div>
 
 <script>
+
+// SIDEBAR LOGIC
+function toggleSidebar() {
+  document.getElementById('sidebar-nav').classList.toggle('active-sidebar');
+  document.getElementById('sidebar-overlay').classList.toggle('active-sidebar');
+}
 
 // SWITCH SECTION
 function showSection(id) {

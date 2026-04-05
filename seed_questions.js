@@ -4,12 +4,21 @@ const Question = require("./models/Question");
 const subjects = ["Science", "Technology", "Engineering", "Mathematics"];
 const grades = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 
+<<<<<<< HEAD
 const defaultImages = [
   "https://img.icons8.com/color/256/leaf.png",
   "https://img.icons8.com/color/256/flower.png",
   "https://img.icons8.com/color/256/water.png",
   "https://img.icons8.com/color/256/rain.png",
   "https://img.icons8.com/color/256/apple.png"
+=======
+const images = [
+  "/assets/images/Three_leaves_icon.png",
+  "/assets/images/Flower_poster.jpg",
+  "/assets/images/Water_drop.jpg",
+  "/assets/images/Plum_leaf.jpg",
+  "/assets/images/Sunflower.jpg"
+>>>>>>> 6c2a9afab12e533bb10cfd7bda77804dc2d91670
 ];
 
 const banks = {
