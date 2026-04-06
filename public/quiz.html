@@ -5,6 +5,15 @@
   <meta charset="UTF-8">
   <title>Quiz</title>
   <script src="/assets/js/confetti.browser.min.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+          .then(reg => console.log('Service Worker Registered!'))
+          .catch(err => console.error('SW Registration Failed:', err));
+      });
+    }
+  </script>
   <style>
     @import url("/assets/css/fonts.css");
 
@@ -282,6 +291,14 @@ async function loadQuestions() {
 
     state.qs = sliced;
     
+    // Preload images proactively to prevent display delay!
+    state.qs.forEach(q => {
+      if (q.image) {
+        const preloader = new Image();
+        preloader.src = q.image;
+      }
+    });
+    
     if (state.qs.length === 0) {
       render("<p class='loading'>No questions available for this grade and subject yet.</p><br><button class='back-btn' onclick='goBack()'>Go Back</button>");
       return;
@@ -497,7 +514,7 @@ async function showResult() {
   // Save to DB
   if (email && state.qs.length > 0) {
     try {
-      await fetch("/api/scores/save", {
+      await fetch("/api/scores/submit", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

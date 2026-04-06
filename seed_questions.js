@@ -4,21 +4,12 @@ const Question = require("./models/Question");
 const subjects = ["Science", "Technology", "Engineering", "Mathematics"];
 const grades = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 
-<<<<<<< HEAD
 const defaultImages = [
-  "https://img.icons8.com/color/256/leaf.png",
-  "https://img.icons8.com/color/256/flower.png",
-  "https://img.icons8.com/color/256/water.png",
-  "https://img.icons8.com/color/256/rain.png",
-  "https://img.icons8.com/color/256/apple.png"
-=======
-const images = [
   "/assets/images/Three_leaves_icon.png",
   "/assets/images/Flower_poster.jpg",
   "/assets/images/Water_drop.jpg",
   "/assets/images/Plum_leaf.jpg",
   "/assets/images/Sunflower.jpg"
->>>>>>> 6c2a9afab12e533bb10cfd7bda77804dc2d91670
 ];
 
 const banks = {
@@ -31,7 +22,7 @@ const banks = {
       { q: "Which animal lives in the water?", o: ["Lion", "Monkey", "Fish", "Elephant"], a: "Fish", img: "https://img.icons8.com/color/256/fish.png" }
     ],
     "1-intermediate": [
-      { q: "What part of the plant is in the ground?", o: ["Roots", "Leaves", "Stem", "Flower"], a: "Roots", img: "https://sl.bing.net/jIlMD8bCs9c" },
+      { q: "What part of the plant is in the ground?", o: ["Roots", "Leaves", "Stem", "Flower"], a: "Roots", img: "https://img.icons8.com/color/256/potted-plant.png" },
       { q: "Which animal is a reptile?", o: ["Snake", "Dog", "Bird", "Frog"], a: "Snake", img: "https://img.icons8.com/color/256/snake.png" },
       { q: "What do you use to measure temperature?", o: ["Thermometer", "Ruler", "Scale", "Clock"], a: "Thermometer", img: "https://img.icons8.com/color/256/thermometer.png" },
       { q: "What happens when you freeze water?", o: ["It becomes ice", "It boils", "It disappears", "It goes away"], a: "It becomes ice", img: "https://img.icons8.com/color/256/snow.png" },
@@ -40,7 +31,7 @@ const banks = {
     "1-hard": [
       { q: "Which part of the plant makes food?", o: ["Leaves", "Roots", "Stem", "Flowers"], a: "Leaves", img: "https://img.icons8.com/color/256/leaf.png" },
       { q: "What do we call a baby dog?", o: ["Puppy", "Kitten", "Calf", "Cub"], a: "Puppy", img: "https://img.icons8.com/color/256/dog.png" },
-      { q: "Which of these dissolves in water?", o: ["Salt", "Sand", "Wood", "Plastic"], a: "Salt", img: "https://img.icons8.com/color/256/salt-shaker.png" },
+      { q: "Which of these dissolves in water?", o: ["Salt", "Sand", "Wood", "Plastic"], a: "Salt", img: "https://img.icons8.com/color/256/salt.png" },
       { q: "What gives us light and heat during the day?", o: ["Moon", "Stars", "Sun", "Fire"], a: "Sun", img: "https://img.icons8.com/color/256/sun.png" },
       { q: "Which animal changes from a caterpillar?", o: ["Butterfly", "Bird", "Dog", "Fish"], a: "Butterfly", img: "https://img.icons8.com/color/256/butterfly.png" }
     ],

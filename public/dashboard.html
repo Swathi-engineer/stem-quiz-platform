@@ -493,25 +493,15 @@ button:active {
 
   <div class="navbar-nav" id="sidebar-nav">
     <button class="close-sidebar" onclick="toggleSidebar()">✕</button>
-    <div class="navbar-stats" style="margin: 15px 30px; margin-bottom: 0px;" id="mob-stats">
-      <div class="streak" title="Gems">💎 <span class="dash-gems">0</span></div>
-    </div>
-<<<<<<< HEAD
-    <a onclick="showSection('courses')">Courses</a>
-    <a onclick="showSection('progress')">My Progress</a>
-    <a onclick="showSection('leadership')">Leadership</a>
-    <a onclick="openProfileModal()" id="nav-profile-name" style="display:flex; align-items:center; gap:8px;">
-        <img id="nav-profile-img" style="display:none; width:30px; height:30px; border-radius:50%; object-fit:cover; border:2px solid #58cc02;">
-        Profile
-    </a>
-    <a onclick="showSection('shop')">Avatar Shop</a>
-=======
     <a onclick="showSection('courses'); toggleSidebar()">Courses</a>
     <a onclick="showSection('progress'); toggleSidebar()">My Progress</a>
     <a onclick="showSection('leadership'); toggleSidebar()">Leadership</a>
-    <a onclick="openProfileModal(); toggleSidebar()">Profile</a>
+    <a onclick="openProfileModal(); toggleSidebar()" id="nav-profile-name" style="display:flex; align-items:center; gap:8px;">
+        <img id="nav-profile-img" style="display:none; width:30px; height:30px; border-radius:50%; object-fit:cover; border:2px solid #58cc02;">
+        Profile
+    </a>
     <a onclick="showSection('shop'); toggleSidebar()">Avatar Shop</a>
->>>>>>> 6c2a9afab12e533bb10cfd7bda77804dc2d91670
+    <a style="cursor: default; background: rgba(28,176,246,0.1); padding: 5px 12px; border-radius: 20px; border: 1px solid rgba(28,176,246,0.3); color: #1cb0f6; text-shadow: 0 0 10px rgba(28,176,246,0.5);" title="Currently holding Gems">💎 <span class="dash-gems">0</span></a>
     <a onclick="logout()">Logout</a>
   </div>
 </div>
@@ -915,14 +905,17 @@ async function loadPerformance() {
 
   // GAMIFIED STATS UPDATE
   const streakDays = Math.floor(Math.random() * 5) + 2; // Mock streak
-  currentGems = userProfile.earnedGems !== undefined 
+  let currentGems = userProfile.earnedGems !== undefined 
       ? userProfile.earnedGems - (userProfile.spentGems || 0) 
       : (totalXP * 3 + 120) - (userProfile.spentGems || 0);
 
   if(document.getElementById("dash-xp")) document.getElementById("dash-xp").innerText = totalXP;
   if(document.getElementById("dash-streak")) document.getElementById("dash-streak").innerText = streakDays;
   if(document.getElementById("nav-streak")) document.getElementById("nav-streak").innerText = streakDays;
-  updateGemsDisplay();
+  
+  // Update Gem elements across DOM
+  document.querySelectorAll(".dash-gems").forEach(el => el.innerText = currentGems);
+  
   if(typeof renderShop === 'function') renderShop();
 
   // POPULATE RECENTLY COMPLETED ASSIGNMENTS
